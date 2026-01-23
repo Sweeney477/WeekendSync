@@ -1,0 +1,41 @@
+{
+  "name": "weekendsync",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WeekendSync MVP (Next.js + Supabase)",
+  "scripts": {
+    "dev": "next dev --turbo",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "vitest",
+    "test:watch": "vitest --watch"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "@supabase/ssr": "^0.5.2",
+    "@supabase/supabase-js": "^2.90.1",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
+    "next": "^15.5.9",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "zod": "^4.3.5"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "^4.1.18",
+    "@types/node": "^25.0.6",
+    "@types/react": "^19.2.8",
+    "@types/react-dom": "^19.2.3",
+    "@vitest/coverage-v8": "^4.0.16",
+    "autoprefixer": "^10.4.23",
+    "eslint": "^8.57.1",
+    "eslint-config-next": "^15.5.9",
+    "postcss": "^8.5.6",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3",
+    "vitest": "^4.0.16"
+  }
+}
