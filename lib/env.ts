@@ -19,6 +19,7 @@ export function getEnv(): Env {
 
   const parsed = serverSchema.safeParse(env);
   if (!parsed.success) {
+    console.error("❌ Invalid environment variables:", parsed.error.flatten().fieldErrors);
     // Keep error short to avoid leaking env details.
     throw new Error("Missing/invalid environment variables. Check env.example.");
   }
