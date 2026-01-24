@@ -3,7 +3,6 @@
 import { addDays, format, parseISO } from "date-fns";
 import { useEffect, useState, useMemo } from "react";
 import { StickyFooter } from "@/components/ui/StickyFooter";
-import { TripHeader } from "../_components/TripHeader";
 
 type SearchEvent = {
   externalEventId: string;
@@ -138,13 +137,7 @@ export function EventsClient({ tripId }: { tripId: string }) {
   }, [events, category]);
 
   return (
-    <div className="flex flex-col gap-6">
-      <TripHeader
-        title={`${city}, ${startDate ? format(parseISO(startDate), "MMM dd") : ""}-${endDate ? format(parseISO(endDate), "dd") : ""}`}
-        subtitle="GROUP TRIP"
-        showSearch
-      />
-
+    <div className="flex flex-col gap-6 pt-4">
       <div className="flex flex-col gap-8 px-4 pb-64">
         <div className="flex gap-2">
           <button

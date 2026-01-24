@@ -4,7 +4,6 @@
 import { useEffect, useState, useMemo } from "react";
 import Image from "next/image";
 import { StickyFooter } from "@/components/ui/StickyFooter";
-import { TripHeader } from "../_components/TripHeader";
 
 type Destination = {
   id: string;
@@ -90,9 +89,7 @@ export function DestinationsClient({ tripId }: { tripId: string }) {
   const selectedCount = destinations.length;
 
   return (
-    <div className="flex flex-col gap-6">
-      <TripHeader title="Destination Ideas" />
-
+    <div className="flex flex-col gap-6 pt-4">
       <div className="flex flex-col gap-8 px-4 pb-48">
         <div className="flex w-full items-center justify-center gap-1.5">
           <div className="h-1.5 w-1.5 rounded-full bg-slate-200" />

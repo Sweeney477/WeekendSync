@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Card } from "@/components/ui/Card";
-import { TripHeader } from "../_components/TripHeader";
 import { format, parseISO, addDays } from "date-fns";
 import { StickyFooter } from "@/components/ui/StickyFooter";
 
@@ -12,7 +11,12 @@ type ResultsResponse = {
   destination: { winnerId: string | null; rounds: any[] };
 };
 
-type Weekend = { weekend_start: string; weekend_end: string; score: number };
+type Weekend = {
+  weekend_start: string;
+  weekend_end: string;
+  score: number;
+  counts: { yes: number; maybe: number; no: number; unset: number; total: number };
+};
 type Destination = { id: string; city_name: string; country_code: string | null; rank_score: number };
 type SavedEvent = { id: string; title: string; startTime: string; venue: string | null; url: string | null; voteCount: number };
 
@@ -91,9 +95,7 @@ export function SummaryClient({ tripId }: { tripId: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <TripHeader title="Final Plan Summary" />
-
+    <div className="flex flex-col gap-6 pt-4">
       <div className="flex flex-col gap-8 px-4 pb-48">
         <Card className="flex flex-col gap-4 rounded-[32px] border-none bg-white p-6 shadow-sm">
           <div className="flex items-center justify-between">
@@ -127,7 +129,31 @@ export function SummaryClient({ tripId }: { tripId: string }) {
               />
             </button>
           </div>
-          <p className="text-sm font-medium text-cyan-600">This trip is finalized and ready to go!</p>
+          <p className="text-sm font-medium text-cyan-600">
+            {isLocked ? "This trip is finalized and ready to go!" : "You can still update availability while the trip is open."}
+          </p>
+          {!isLocked && (
+            <a
+              href={`/trip/${tripId}/availability`}
+              className="flex items-center justify-center gap-2 rounded-xl border border-cyan-200 bg-cyan-50 px-4 py-2 text-sm font-bold text-cyan-700 transition-all hover:bg-cyan-100 active:scale-[0.98]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+                <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+              </svg>
+              Edit Availability
+            </a>
+          )}
         </Card>
 
         <section className="flex flex-col gap-4">
@@ -159,6 +185,122 @@ export function SummaryClient({ tripId }: { tripId: string }) {
               <Image src="https://images.unsplash.com/photo-1531206715517-5c0ba140b2b8?q=80&w=100&auto=format&fit=crop" alt="" fill className="object-cover" />
             </div>
           </Card>
+        </section>
+
+        <section className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <h3 className="text-xl font-bold text-slate-900">Best Dates</h3>
+            <a
+              href={`/trip/${tripId}/plan?tab=costs`}
+              className="flex items-center gap-1.5 rounded-xl border border-cyan-200 bg-cyan-50 px-3 py-1.5 text-xs font-bold text-cyan-700 transition-all hover:bg-cyan-100 active:scale-[0.98]"
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="14"
+                height="14"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <line x1="12" x2="12" y1="5" y2="19" />
+                <line x1="5" x2="19" y1="12" y2="12" />
+              </svg>
+              Add Cost
+            </a>
+          </div>
+          <div className="flex flex-col gap-3">
+            {weekends
+              .slice(0, 3)
+              .map((w, i) => {
+                const start = parseISO(w.weekend_start);
+                const end = parseISO(w.weekend_end);
+                const dateRange =
+                  w.weekend_start === w.weekend_end
+                    ? format(start, "MMM dd")
+                    : `${format(start, "MMM dd")} – ${format(end, "MMM dd")}`;
+                return (
+                  <Card key={w.weekend_start} className="flex items-center justify-between rounded-[24px] border-none bg-white p-4 shadow-sm">
+                    <div className="flex items-center gap-4">
+                      <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-600 font-bold">
+                        #{i + 1}
+                      </div>
+                      <div className="flex flex-col">
+                        <span className="font-bold text-slate-900">{dateRange}</span>
+                        <div className="flex items-center gap-2 mt-1">
+                          {w.counts.yes > 0 && (
+                            <div className="flex items-center gap-1">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="10"
+                                height="10"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="text-emerald-600"
+                              >
+                                <polyline points="20 6 9 17 4 12" />
+                              </svg>
+                              <span className="text-[10px] font-medium text-emerald-700">{w.counts.yes}</span>
+                            </div>
+                          )}
+                          {w.counts.maybe > 0 && (
+                            <div className="flex items-center gap-1">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="10"
+                                height="10"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="text-amber-600"
+                              >
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
+                                <line x1="12" x2="12" y1="17" y2="17" />
+                              </svg>
+                              <span className="text-[10px] font-medium text-amber-700">{w.counts.maybe}</span>
+                            </div>
+                          )}
+                          {w.counts.no > 0 && (
+                            <div className="flex items-center gap-1">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                width="10"
+                                height="10"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                strokeWidth="3"
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                className="text-rose-600"
+                              >
+                                <circle cx="12" cy="12" r="10" />
+                                <line x1="15" x2="9" y1="9" y2="15" />
+                                <line x1="9" x2="15" y1="9" y2="15" />
+                              </svg>
+                              <span className="text-[10px] font-medium text-rose-700">{w.counts.no}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-bold text-cyan-600">Score: {w.score}</span>
+                    </div>
+                  </Card>
+                );
+              })}
+          </div>
         </section>
 
         <section className="flex flex-col gap-4">

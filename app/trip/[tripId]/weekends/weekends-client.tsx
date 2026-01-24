@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
-import { TripHeader } from "../_components/TripHeader";
 import { format, parseISO } from "date-fns";
 import { StickyFooter } from "@/components/ui/StickyFooter";
 
@@ -67,9 +66,7 @@ export function WeekendsClient({ tripId }: { tripId: string }) {
   };
 
   return (
-    <div className="flex flex-col gap-6">
-      <TripHeader title={`Select Best ${optionsNoun}`} />
-
+    <div className="flex flex-col gap-6 pt-4">
       <div className="flex flex-col gap-8 px-4 pb-40">
         <div className="flex flex-col gap-4">
           <span className="text-[10px] font-bold uppercase tracking-widest text-slate-500">Filter by Availability</span>

@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { CreateTripClient } from "./create-trip-client";
 
 export default async function NewTripPage() {
-  const supabase = await createServerSupabaseClient();
+  const supabase = await createServerSupabaseClient({ allowCookieWrites: false });
   const { data: { user } } = await supabase.auth.getUser();
 
   if (!user) {

@@ -1,16 +1,18 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 
-export default function OnboardingPage() {
+export default function ProfilePage() {
   const [displayName, setDisplayName] = useState("");
   const [homeCity, setHomeCity] = useState("");
   const [isSaving, setIsSaving] = useState(false);
   const [isCheckingSession, setIsCheckingSession] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
   useEffect(() => {
     (async () => {
@@ -38,30 +40,15 @@ export default function OnboardingPage() {
   async function onSave() {
     setIsSaving(true);
     setError(null);
+    setSuccess(null);
     try {
-      const sp = new URLSearchParams(window.location.search);
-      const inviteCode = sp.get("inviteCode");
-      const next = sp.get("next");
-      
       const res = await fetch("/api/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ displayName, homeCity: homeCity || null }),
       });
       if (!res.ok) throw new Error(await res.text());
-      if (inviteCode) {
-        const joinRes = await fetch("/api/trips/join", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ inviteCode }),
-        });
-        const joinJson = await joinRes.json().catch(() => null);
-        if (joinRes.ok && joinJson?.tripId) {
-          window.location.href = `/trip/${joinJson.tripId}/plan`;
-          return;
-        }
-      }
-      window.location.href = next || "/";
+      setSuccess("Profile updated.");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Failed to save profile");
     } finally {
@@ -75,20 +62,25 @@ export default function OnboardingPage() {
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-6 px-4 py-8 pb-24">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-2xl font-semibold">Quick setup</h1>
-        <p className="text-sm text-slate-600">Enter your name so your group recognizes you. Home city is optional.</p>
+      <header className="flex items-start justify-between gap-4">
+        <div className="flex flex-col gap-2">
+          <h1 className="text-2xl font-semibold">Profile</h1>
+          <p className="text-sm text-slate-600">Update your personal info for this WeekendSync account.</p>
+        </div>
+        <Link href="/" className="text-sm font-bold text-slate-400 underline decoration-slate-200">
+          Home
+        </Link>
       </header>
 
       <Card className="flex flex-col gap-3">
         <Input label="Your name" placeholder="e.g. Sam" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
         <Input label="Home city (optional)" placeholder="e.g. Chicago" value={homeCity} onChange={(e) => setHomeCity(e.target.value)} />
         <Button onClick={onSave} isLoading={isSaving} disabled={!displayName}>
-          Continue
+          Save changes
         </Button>
         {error ? <p className="text-sm text-rose-700">{error}</p> : null}
+        {success ? <p className="text-sm text-emerald-700">{success}</p> : null}
       </Card>
     </main>
   );
 }
-

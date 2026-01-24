@@ -282,7 +282,7 @@ export function PlanClient({ tripId, userRole }: { tripId: string; userRole: str
       )}
 
       {/* Tab Navigation */}
-      <div className="sticky top-[73px] z-40 flex gap-2 overflow-x-auto bg-slate-50 pb-2 pt-2">
+      <div className="sticky top-[112px] z-40 flex gap-2 overflow-x-auto bg-slate-50 pb-2 pt-2">
         {[
           { key: "overview" as Tab, label: "Overview" },
           { key: "plan" as Tab, label: "Plan" },

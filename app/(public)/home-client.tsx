@@ -431,6 +431,9 @@ export function HomeClient() {
               </Link>
             ))}
           </div>
+          <Link href="/profile" className="text-sm font-bold text-slate-400 underline decoration-slate-200">
+            Profile
+          </Link>
           <button onClick={onSignOut} className="text-sm font-bold text-slate-400 underline decoration-slate-200">
             Sign Out
           </button>

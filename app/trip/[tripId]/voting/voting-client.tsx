@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { StickyFooter } from "@/components/ui/StickyFooter";
-import { TripHeader } from "../_components/TripHeader";
 import { format, parseISO } from "date-fns";
 
 type Weekend = { weekend_start: string; weekend_end: string; score: number };
@@ -88,9 +87,7 @@ export function VotingClient({ tripId }: { tripId: string }) {
   }
 
   return (
-    <div className="flex flex-col gap-6">
-      <TripHeader title="Rank Your Choices" subtitle="OPEN" />
-
+    <div className="flex flex-col gap-6 pt-4">
       <div className="flex flex-col gap-10 px-4 pb-40">
         <section className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">

@@ -1,4 +1,3 @@
-import { TripHeader } from "../_components/TripHeader";
 import { requireTripMember } from "@/lib/auth/server";
 import { PlanClient } from "./plan-client";
 
@@ -6,7 +5,7 @@ export const dynamic = "force-dynamic";
 
 export default async function TripPlanPage({ params }: { params: Promise<{ tripId: string }> }) {
   const { tripId } = await params;
-  const { user, supabase, member } = await requireTripMember(tripId);
+  const { user, supabase, member } = await requireTripMember(tripId, { allowCookieWrites: false });
 
   // Fetch trip details
   const { data: trip, error: tripError } = await supabase
@@ -24,7 +23,6 @@ export default async function TripPlanPage({ params }: { params: Promise<{ tripI
 
   return (
     <div className="flex flex-col">
-      <TripHeader title={trip.name} />
       <PlanClient tripId={tripId} userRole={member.role} />
     </div>
   );

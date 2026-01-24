@@ -1,5 +1,4 @@
 import { Card } from "@/components/ui/Card";
-import { TripHeader } from "../_components/TripHeader";
 import { requireTripMember } from "@/lib/auth/server";
 import { format, parseISO } from "date-fns";
 import Link from "next/link";
@@ -7,7 +6,7 @@ import { InviteButton } from "./invite-button";
 
 export default async function TripDashboardPage({ params }: { params: Promise<{ tripId: string }> }) {
   const { tripId } = await params;
-  const { user, supabase } = await requireTripMember(tripId);
+  const { user, supabase } = await requireTripMember(tripId, { allowCookieWrites: false });
 
   // 1. Fetch Trip details
   const { data: trip } = await supabase
@@ -85,9 +84,7 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className="flex flex-col gap-6 px-4 pb-24">
-      <TripHeader title={trip?.name ?? "Trip"} />
-
+    <div className="flex flex-col gap-6 px-4 pb-24 pt-4">
       <Card className="flex flex-col gap-4 rounded-3xl border-none bg-white p-6 shadow-sm">
         <div className="flex items-center justify-between">
           <span className="text-[10px] font-bold uppercase tracking-widest text-brand-600">Group Status</span>
@@ -230,6 +227,9 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
         </div>
         <div className="flex flex-col gap-3">
           {members?.map((member: any) => {
+            // Skip members without profiles
+            if (!member.profiles) return null;
+            
             const hasSubmitted = usersWhoSubmitted.has(member.profiles.id);
             const isCurrentUser = member.user_id === user.id;
             return (
