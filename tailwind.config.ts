@@ -16,7 +16,18 @@ export default {
           700: "#0e7490",
           800: "#155e75",
           900: "#164e63"
-        }
+        },
+        primary: "#E52320", // Red from the poster
+        "poster-yellow": "#FFD700",
+        "poster-green": "#588E52",
+        "poster-blue": "#336699",
+        "poster-orange": "#F39200",
+        "background-light": "#F5F2E8", // Cream/Vintage paper
+        "background-dark": "#1A1A1A",
+      },
+      fontFamily: {
+        display: ["var(--font-space-grotesk)", "sans-serif"],
+        sans: ["var(--font-inter)", "sans-serif"],
       }
     }
   }
