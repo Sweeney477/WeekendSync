@@ -32,20 +32,20 @@ export function TripHeaderWithNav({ tripId, tripName }: TripHeaderWithNavProps) 
   const subtitle = activeStep?.label;
 
   return (
-    <div className="sticky top-0 z-50 bg-slate-50/80 backdrop-blur-md">
+    <div className="sticky top-0 z-50 border-b-4 border-black bg-white dark:border-white dark:bg-zinc-900">
       <header className="flex w-full items-center justify-between px-4 py-4">
         <button
           onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100"
+          className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-yellow dark:border-white dark:bg-zinc-900 dark:text-white dark:hover:bg-poster-yellow dark:hover:text-black"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="28"
-            height="28"
+            width="24"
+            height="24"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2.5"
+            strokeWidth="3"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
@@ -54,28 +54,30 @@ export function TripHeaderWithNav({ tripId, tripName }: TripHeaderWithNavProps) 
         </button>
 
         <div className="flex flex-col items-center text-center">
-          <h1 className="text-lg font-bold text-slate-900">{tripName}</h1>
+          <h1 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">
+            {tripName}
+          </h1>
           {subtitle && (
-            <p className="text-[10px] font-bold uppercase tracking-wider text-brand-500">
+            <p className="font-sans text-[10px] font-bold uppercase tracking-widest text-poster-blue opacity-80">
               {subtitle}
             </p>
           )}
         </div>
 
-        <div className="flex items-center gap-1">
+        <div className="flex items-center gap-2">
           <Link
             href="/profile"
-            className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100"
+            className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-green hover:text-white dark:border-white dark:bg-zinc-900 dark:text-white"
             aria-label="Profile"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
@@ -83,15 +85,15 @@ export function TripHeaderWithNav({ tripId, tripName }: TripHeaderWithNavProps) 
               <circle cx="12" cy="7" r="4" />
             </svg>
           </Link>
-          <button className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100">
+          <button className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-orange hover:text-white dark:border-white dark:bg-zinc-900 dark:text-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
@@ -103,9 +105,10 @@ export function TripHeaderWithNav({ tripId, tripName }: TripHeaderWithNavProps) 
         </div>
       </header>
 
-      <nav className="px-4 pb-3">
+      <nav className="px-4 pb-4">
         <Stepper steps={steps} activeKey={activeKey} />
       </nav>
     </div>
   );
+
 }

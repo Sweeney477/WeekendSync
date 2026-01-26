@@ -23,7 +23,7 @@ export default async function TripLayout({
   const tripName = trip?.name ?? "Trip";
 
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-slate-50">
+    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col bg-background-light dark:bg-background-dark">
       <TripHeaderWithNav tripId={tripId} tripName={tripName} />
       {children}
     </main>
