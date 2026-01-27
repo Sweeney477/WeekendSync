@@ -18,9 +18,16 @@
   --color-poster-green: #588E52;
   --color-poster-blue: #336699;
   --color-poster-orange: #F39200;
-  --color-background-light: #E7D9B4;
+  --color-background-light: #EFE9D5;
   /* Distinctly aged paper tone */
-  --color-background-dark: #1A1A1A;
+  --color-background-dark: #1E1C1A;
+
+  /* Dark paper theme tokens (warm, vintage feel) */
+  --color-surface-dark: #2A2826;
+  --color-surface-dark-2: #353230;
+  --color-ink-dark: #E8E4DF;
+  --color-muted-dark: #9A9590;
+  --color-shadow-dark: rgba(0, 0, 0, 0.6);
 }
 
 html,
@@ -29,8 +36,8 @@ body {
   min-height: 100vh;
 }
 
-.dark html,
-.dark body {
+html.dark,
+html.dark body {
   background-color: var(--color-background-dark);
 }
 

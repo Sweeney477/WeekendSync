@@ -20,8 +20,15 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${inter.variable} ${spaceGrotesk.variable} min-h-dvh bg-background-light bg-noise font-sans text-black antialiased transition-colors duration-300 dark:bg-background-dark dark:text-white`}>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){try{var t=localStorage.getItem("ws_theme");var d=t==="dark";var l=t==="light";var p=window.matchMedia&&window.matchMedia("(prefers-color-scheme: dark)").matches;var s=l?false:(d?true:p);document.documentElement.classList.toggle("dark",s);}catch(e){}})();`,
+          }}
+        />
+      </head>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} min-h-dvh bg-background-light bg-noise font-sans text-black antialiased transition-colors duration-300 dark:bg-background-dark dark:text-ink-dark`}>
         {children}
         <Analytics />
       </body>

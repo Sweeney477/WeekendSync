@@ -32,11 +32,11 @@ export function TripHeaderWithNav({ tripId, tripName }: TripHeaderWithNavProps) 
   const subtitle = activeStep?.label;
 
   return (
-    <div className="sticky top-0 z-50 border-b-4 border-black bg-white dark:border-white dark:bg-zinc-900">
+    <div className="sticky top-0 z-50 border-b-4 border-black bg-white dark:border-ink-dark/40 dark:bg-surface-dark">
       <header className="flex w-full items-center justify-between px-4 py-4">
         <button
           onClick={() => router.back()}
-          className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-yellow dark:border-white dark:bg-zinc-900 dark:text-white dark:hover:bg-poster-yellow dark:hover:text-black"
+          className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-yellow dark:border-ink-dark/40 dark:bg-surface-dark-2 dark:text-ink-dark dark:hover:bg-poster-yellow dark:hover:text-black"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -54,7 +54,7 @@ export function TripHeaderWithNav({ tripId, tripName }: TripHeaderWithNavProps) 
         </button>
 
         <div className="flex flex-col items-center text-center">
-          <h1 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">
+          <h1 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-ink-dark">
             {tripName}
           </h1>
           {subtitle && (
@@ -67,7 +67,7 @@ export function TripHeaderWithNav({ tripId, tripName }: TripHeaderWithNavProps) 
         <div className="flex items-center gap-2">
           <Link
             href="/profile"
-            className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-green hover:text-white dark:border-white dark:bg-zinc-900 dark:text-white"
+            className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-green hover:text-white dark:border-ink-dark/40 dark:bg-surface-dark-2 dark:text-ink-dark"
             aria-label="Profile"
           >
             <svg
@@ -85,7 +85,7 @@ export function TripHeaderWithNav({ tripId, tripName }: TripHeaderWithNavProps) 
               <circle cx="12" cy="7" r="4" />
             </svg>
           </Link>
-          <button className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-orange hover:text-white dark:border-white dark:bg-zinc-900 dark:text-white">
+          <button className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-orange hover:text-white dark:border-ink-dark/40 dark:bg-surface-dark-2 dark:text-ink-dark">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"

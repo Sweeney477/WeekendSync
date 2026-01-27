@@ -13,10 +13,10 @@ export function TripHeader({ title, subtitle, showSearch }: TripHeaderProps) {
   const router = useRouter();
 
   return (
-    <header className="sticky top-0 z-50 flex w-full items-center justify-between bg-slate-50/80 px-4 py-4 backdrop-blur-md">
+    <header className="sticky top-0 z-50 flex w-full items-center justify-between bg-slate-50/80 px-4 py-4 backdrop-blur-md dark:bg-surface-dark/80">
       <button
         onClick={() => router.back()}
-        className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100"
+        className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100 dark:text-ink-dark dark:hover:bg-surface-dark-2"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -34,13 +34,13 @@ export function TripHeader({ title, subtitle, showSearch }: TripHeaderProps) {
       </button>
 
       <div className="flex flex-col items-center text-center">
-        <h1 className="text-lg font-bold text-slate-900">{title}</h1>
+        <h1 className="text-lg font-bold text-slate-900 dark:text-ink-dark">{title}</h1>
         {subtitle && <p className="text-[10px] font-bold uppercase tracking-wider text-brand-500">{subtitle}</p>}
       </div>
 
       <div className="flex items-center gap-1">
         {showSearch && (
-          <button className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100">
+          <button className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100 dark:text-ink-dark dark:hover:bg-surface-dark-2">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -59,7 +59,7 @@ export function TripHeader({ title, subtitle, showSearch }: TripHeaderProps) {
         )}
         <Link
           href="/profile"
-          className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100"
+          className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100 dark:text-ink-dark dark:hover:bg-surface-dark-2"
           aria-label="Profile"
         >
           <svg
@@ -77,7 +77,7 @@ export function TripHeader({ title, subtitle, showSearch }: TripHeaderProps) {
             <circle cx="12" cy="7" r="4" />
           </svg>
         </Link>
-        <button className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100">
+        <button className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100 dark:text-ink-dark dark:hover:bg-surface-dark-2">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"

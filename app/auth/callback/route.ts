@@ -9,7 +9,11 @@ export async function GET(req: Request) {
 
   const supabase = await createServerSupabaseClient();
   if (code) {
-    await supabase.auth.exchangeCodeForSession(code);
+    const { error } = await supabase.auth.exchangeCodeForSession(code);
+    if (error) {
+      console.error("Error exchanging code for session:", error.message);
+      return NextResponse.redirect(new URL(`/sign-in?message=${encodeURIComponent(error.message)}`, url.origin));
+    }
   }
 
   // Ensure a profile row exists; if display_name missing we’ll push user to onboarding.

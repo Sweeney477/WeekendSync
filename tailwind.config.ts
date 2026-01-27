@@ -1,6 +1,7 @@
 import type { Config } from "tailwindcss";
 
 export default {
+  darkMode: "class",
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
   theme: {
     extend: {
@@ -23,7 +24,12 @@ export default {
         "poster-blue": "#336699",
         "poster-orange": "#F39200",
         "background-light": "#EFE9D5", // More distinct vintage paper tone
-        "background-dark": "#1A1A1A",
+        "background-dark": "#1E1C1A",
+        // Dark paper theme tokens (warm, vintage feel)
+        "surface-dark": "#2A2826",
+        "surface-dark-2": "#353230",
+        "ink-dark": "#E8E4DF",
+        "muted-dark": "#9A9590",
       },
       fontFamily: {
         display: ["var(--font-space-grotesk)", "sans-serif"],

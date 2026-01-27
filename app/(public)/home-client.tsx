@@ -142,7 +142,7 @@ export function HomeClient() {
     <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-md flex-col p-6">
       {createdTrip && (
         <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-6 backdrop-blur-sm">
-          <div className="flex w-full flex-col gap-6 border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_#000] dark:border-white dark:bg-zinc-900 dark:shadow-[8px_8px_0px_0px_#fff]">
+          <div className="flex w-full flex-col gap-6 border-4 border-black bg-white p-8 shadow-[8px_8px_0px_0px_#000] dark:border-ink-dark/40 dark:bg-surface-dark dark:shadow-[8px_8px_0px_0px_rgba(232,228,223,0.15)]">
             <div className="flex flex-col gap-2 text-center">
               <h2 className="font-display text-3xl font-bold uppercase tracking-tighter">Trip Created!</h2>
               <p className="font-sans text-sm font-medium">
@@ -151,8 +151,8 @@ export function HomeClient() {
             </div>
 
             <div className="flex w-full flex-col gap-4">
-              <div className="flex items-center justify-between border-2 border-black bg-background-light p-4 dark:border-white dark:bg-zinc-800">
-                <span className="truncate font-sans text-sm font-bold tracking-widest text-black dark:text-white">
+              <div className="flex items-center justify-between border-2 border-black bg-background-light p-4 dark:border-ink-dark/40 dark:bg-surface-dark-2">
+                <span className="truncate font-sans text-sm font-bold tracking-widest text-black dark:text-ink-dark">
                   weekendsync.app/j/{createdTrip.inviteCode}
                 </span>
                 <button
@@ -194,7 +194,7 @@ export function HomeClient() {
 
       <header className="mb-16 pt-12">
         <div className="flex items-center gap-3">
-          <div className="flex h-12 w-12 items-center justify-center bg-black dark:bg-white">
+          <div className="flex h-12 w-12 items-center justify-center bg-black dark:bg-ink-dark">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="24"
@@ -205,7 +205,7 @@ export function HomeClient() {
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
-              className="text-white dark:text-black"
+              className="text-white dark:text-background-dark"
             >
               <path d="M3 2v6h6V2z" />
               <path d="M15 2v6h6V2z" />
@@ -220,7 +220,7 @@ export function HomeClient() {
       </header>
 
       <div className="relative mb-12">
-        <div className="flex aspect-square flex-col justify-between border-4 border-black bg-white p-4 dark:border-white dark:bg-zinc-900">
+        <div className="flex aspect-square flex-col justify-between border-4 border-black bg-white p-4 dark:border-ink-dark/40 dark:bg-surface-dark">
           <div className="flex items-start justify-between">
             <span className="font-display text-6xl font-bold leading-none">01</span>
             <svg
@@ -240,7 +240,7 @@ export function HomeClient() {
               <path d="M16 3.13a4 4 0 0 1 0 7.75" />
             </svg>
           </div>
-          <div className="border-t-4 border-black pt-4 dark:border-white">
+          <div className="border-t-4 border-black pt-4 dark:border-ink-dark/40">
             <p className="font-display text-xl font-bold uppercase tracking-widest">
               {isAuthed ? `Welcome back, ${me?.profile?.display_name?.split(' ')[0] ?? 'Friend'}` : "Find Your People"}
             </p>
@@ -258,7 +258,7 @@ export function HomeClient() {
                 <Link
                   key={t.id}
                   href={`/trip/${t.id}/plan`}
-                  className="group flex items-center justify-between border-2 border-black bg-white p-4 transition-all hover:bg-poster-yellow dark:border-white dark:bg-zinc-800 dark:hover:bg-poster-yellow dark:hover:text-black"
+                  className="group flex items-center justify-between border-2 border-black bg-white p-4 transition-all hover:bg-poster-yellow dark:border-ink-dark/40 dark:bg-surface-dark dark:hover:bg-poster-yellow dark:hover:text-black"
                 >
                   <div className="flex flex-col">
                     <span className="font-display font-bold uppercase tracking-wider">{t.name}</span>
@@ -285,7 +285,7 @@ export function HomeClient() {
                 <Link
                   key={t.id}
                   href={`/trip/${t.id}/plan`}
-                  className="group flex items-center justify-between border-2 border-black bg-slate-50 p-4 transition-all hover:bg-poster-green hover:text-white dark:border-white dark:bg-zinc-800"
+                  className="group flex items-center justify-between border-2 border-black bg-slate-50 p-4 transition-all hover:bg-poster-green hover:text-white dark:border-ink-dark/40 dark:bg-surface-dark-2"
                 >
                   <div className="flex flex-col">
                     <span className="font-display font-bold uppercase tracking-wider">{t.name}</span>
@@ -324,7 +324,7 @@ export function HomeClient() {
               id="trip-code"
               type="text"
               placeholder="E.G. WKND24"
-              className="w-full border-4 border-black bg-transparent p-4 font-display text-2xl font-bold uppercase tracking-widest placeholder:text-zinc-400 focus:border-primary focus:ring-0 dark:border-white dark:focus:border-poster-yellow"
+              className="w-full border-4 border-black bg-transparent p-4 font-display text-2xl font-bold uppercase tracking-widest placeholder:text-zinc-400 focus:border-primary focus:ring-0 dark:border-ink-dark/40 dark:text-ink-dark dark:placeholder:text-muted-dark dark:focus:border-poster-yellow"
               value={inviteCode}
               onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
             />
@@ -332,7 +332,7 @@ export function HomeClient() {
           <button
             onClick={onJoinTrip}
             disabled={!inviteCode || loading}
-            className="w-full border-4 border-black bg-brand-500 px-6 py-5 font-display text-xl font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white active:translate-y-1 disabled:opacity-50 dark:border-white dark:text-black dark:hover:bg-white"
+            className="w-full border-4 border-black bg-brand-500 px-6 py-5 font-display text-xl font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white active:translate-y-1 disabled:opacity-50 dark:border-ink-dark/40 dark:hover:bg-surface-dark-2"
           >
             {loading ? "Loading..." : "Join Trip"}
           </button>
@@ -340,9 +340,9 @@ export function HomeClient() {
       </div>
 
       <div className="mt-12 flex items-center gap-4">
-        <div className="h-1 flex-grow bg-black dark:bg-white"></div>
+        <div className="h-1 flex-grow bg-black dark:bg-ink-dark/40"></div>
         <span className="font-display text-sm font-bold tracking-widest">OR</span>
-        <div className="h-1 flex-grow bg-black dark:bg-white"></div>
+        <div className="h-1 flex-grow bg-black dark:bg-ink-dark/40"></div>
       </div>
 
       <div className="mb-8 mt-8">
@@ -356,7 +356,7 @@ export function HomeClient() {
               router.push("/trips/new");
             }
           }}
-          className="flex w-full items-center justify-center gap-3 border-4 border-black p-4 font-display font-bold uppercase tracking-widest hover:bg-poster-yellow hover:text-black transition-colors dark:border-white"
+          className="flex w-full items-center justify-center gap-3 border-4 border-black p-4 font-display font-bold uppercase tracking-widest hover:bg-poster-yellow hover:text-black transition-colors dark:border-ink-dark/40"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -376,7 +376,7 @@ export function HomeClient() {
         </button>
       </div>
 
-      <nav className="mt-auto flex justify-between border-t-4 border-black px-2 pt-6 pb-2 dark:border-white">
+      <nav className="mt-auto flex justify-between border-t-4 border-black px-2 pt-6 pb-2 dark:border-ink-dark/40">
         <button className="group flex flex-col items-center gap-1" onClick={() => router.push("/")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"

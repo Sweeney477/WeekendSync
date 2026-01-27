@@ -15,8 +15,8 @@ export function Stepper({ steps, activeKey }: { steps: Step[]; activeKey: string
                 className={clsx(
                   "inline-flex items-center whitespace-nowrap border-2 px-4 py-2 font-display text-xs font-bold uppercase tracking-widest transition-all",
                   isActive
-                    ? "border-black bg-poster-yellow text-black dark:border-white dark:text-black"
-                    : "border-black/10 bg-white text-slate-400 hover:border-black hover:text-black dark:border-white/20 dark:bg-zinc-900 dark:text-zinc-500 dark:hover:border-white dark:hover:text-white",
+                    ? "border-black bg-poster-yellow text-black dark:border-ink-dark/40 dark:text-black"
+                    : "border-black/10 bg-white text-slate-400 hover:border-black hover:text-black dark:border-ink-dark/20 dark:bg-surface-dark dark:text-muted-dark dark:hover:border-ink-dark/40 dark:hover:text-ink-dark",
                 )}
               >
                 {s.label}
