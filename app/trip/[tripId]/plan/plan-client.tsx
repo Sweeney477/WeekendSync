@@ -798,7 +798,7 @@ function PlanTab({
                     {owner && (
                       <p className="mt-1 text-xs font-medium text-slate-400">Assigned to {owner.displayName}</p>
                     )}
-                    {item.notes && <p className="mt-2 text-xs italic text-slate-600 dark:text-slate-300">"{item.notes}"</p>}
+                    {item.notes && <p className="mt-2 text-xs italic text-slate-600 dark:text-slate-300">&quot;{item.notes}&quot;</p>}
                   </div>
                   <div className="flex gap-2">
                     <button
