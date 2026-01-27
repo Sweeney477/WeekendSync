@@ -91,8 +91,8 @@ export function VotingClient({ tripId }: { tripId: string }) {
       <div className="flex flex-col gap-10 px-4 pb-40">
         <section className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <h2 className="text-xl font-bold text-slate-900">Section A: Vote for Weekend</h2>
-            <p className="text-sm text-slate-500">Select your top 3 choices by priority</p>
+            <h2 className="font-display text-xl font-bold uppercase tracking-wider text-black dark:text-white">Section A: Vote for Weekend</h2>
+            <p className="font-sans text-sm text-slate-600 dark:text-slate-300">Select your top 3 choices by priority</p>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -107,20 +107,20 @@ export function VotingClient({ tripId }: { tripId: string }) {
                 <button
                   key={w.weekend_start}
                   onClick={() => toggleWeekend(w.weekend_start)}
-                  className={`flex w-full items-center justify-between rounded-3xl border-2 bg-white p-4 transition-all active:scale-[0.98] ${isSelected ? "border-cyan-400" : "border-slate-100"
+                  className={`flex w-full items-center justify-between border-2 p-4 transition-all active:translate-y-0.5 ${isSelected ? "border-black bg-white shadow-[4px_4px_0px_0px_#000] dark:border-white dark:bg-zinc-900 dark:shadow-[4px_4px_0px_0px_#fff]" : "border-black bg-slate-50 opacity-70 hover:opacity-100 dark:border-white dark:bg-zinc-900"
                     }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className={`flex h-10 w-10 items-center justify-center rounded-xl font-bold ${isSelected ? "bg-cyan-100 text-cyan-600" : "bg-slate-50 text-slate-300"
+                    <div className={`flex h-10 w-10 items-center justify-center font-display font-bold text-lg ${isSelected ? "bg-poster-yellow text-black border-2 border-black" : "bg-slate-200 text-slate-400 border-2 border-transparent"
                       }`}>
                       {isSelected ? rank : ""}
                     </div>
                     <div className="flex flex-col text-left">
-                      <span className="font-bold text-slate-900">{dateRange}</span>
-                      <span className="text-xs text-slate-500">Standard Rate</span>
+                      <span className="font-sans font-bold text-black dark:text-white">{dateRange}</span>
+                      <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Standard Rate</span>
                     </div>
                   </div>
-                  <div className="text-slate-300">
+                  <div className="text-black dark:text-white">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="20"
@@ -148,8 +148,8 @@ export function VotingClient({ tripId }: { tripId: string }) {
 
         <section className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <h2 className="text-xl font-bold text-slate-900">Section B: Vote for Destination</h2>
-            <p className="text-sm text-slate-500">Select your top 3 favorite locations</p>
+            <h2 className="font-display text-xl font-bold uppercase tracking-wider text-black dark:text-white">Section B: Vote for Destination</h2>
+            <p className="font-sans text-sm text-slate-600 dark:text-slate-300">Select your top 3 favorite locations</p>
           </div>
 
           <div className="flex flex-col gap-3">
@@ -161,11 +161,11 @@ export function VotingClient({ tripId }: { tripId: string }) {
                 <button
                   key={d.id}
                   onClick={() => toggleDestination(d.id)}
-                  className={`flex w-full items-center justify-between rounded-3xl border-2 bg-white p-4 transition-all active:scale-[0.98] ${isSelected ? "border-cyan-400" : "border-slate-100"
+                  className={`flex w-full items-center justify-between border-2 p-4 transition-all active:translate-y-0.5 ${isSelected ? "border-black bg-white shadow-[4px_4px_0px_0px_#000] dark:border-white dark:bg-zinc-900 dark:shadow-[4px_4px_0px_0px_#fff]" : "border-black bg-slate-50 opacity-70 hover:opacity-100 dark:border-white dark:bg-zinc-900"
                     }`}
                 >
                   <div className="flex items-center gap-4">
-                    <div className="relative h-14 w-14 overflow-hidden rounded-2xl bg-slate-100">
+                    <div className="relative h-14 w-14 overflow-hidden border-2 border-black dark:border-white">
                       <Image
                         src={`https://images.unsplash.com/photo-1502602898657-3e91760cbb34?q=80&w=100&auto=format&fit=crop`}
                         alt={d.city_name}
@@ -174,33 +174,36 @@ export function VotingClient({ tripId }: { tripId: string }) {
                       />
                     </div>
                     <div className="flex flex-col text-left">
-                      <span className="font-bold text-slate-900">{d.city_name}</span>
-                      <span className="text-xs text-slate-500">{d.rationale_tags?.[0] || "Recommended"}</span>
+                      <span className="font-sans font-bold text-black dark:text-white">{d.city_name}</span>
+                      <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">{d.rationale_tags?.[0] || "Recommended"}</span>
                     </div>
                   </div>
 
                   <div className="flex items-center gap-2">
                     {isSelected && (
-                      <span className="rounded-md bg-cyan-100 px-2 py-1 text-[10px] font-bold text-cyan-600 uppercase">
+                      <span className="border-2 border-black bg-poster-blue px-2 py-1 font-display text-[10px] font-bold uppercase text-white dark:border-white">
                         Rank {rank}
                       </span>
                     )}
-                    <div className={`flex h-6 w-6 items-center justify-center rounded-full border-2 transition-all ${isSelected ? "bg-cyan-400 border-cyan-400 text-white" : "border-slate-200 text-transparent"
-                      }`}>
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        width="14"
-                        height="14"
-                        viewBox="0 0 24 24"
-                        fill="none"
-                        stroke="currentColor"
-                        strokeWidth="4"
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      >
-                        <polyline points="20 6 9 17 4 12" />
-                      </svg>
-                    </div>
+                    {isSelected ? (
+                      <div className="flex h-6 w-6 items-center justify-center border-2 border-black bg-poster-green text-black dark:border-white">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          width="14"
+                          height="14"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="4"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        >
+                          <polyline points="20 6 9 17 4 12" />
+                        </svg>
+                      </div>
+                    ) : (
+                      <div className="h-6 w-6 border-2 border-black bg-white dark:border-white dark:bg-zinc-800" />
+                    )}
                   </div>
                 </button>
               );
@@ -209,11 +212,11 @@ export function VotingClient({ tripId }: { tripId: string }) {
         </section>
       </div>
 
-      <StickyFooter>
+      <StickyFooter className="bg-white/90 backdrop-blur-md dark:bg-zinc-950/90">
         <button
           onClick={onSave}
           disabled={saving || (weekendRankings.length === 0 && destinationRankings.length === 0)}
-          className={`flex h-16 w-full items-center justify-center gap-2 rounded-2xl font-bold text-white shadow-lg transition-all active:scale-[0.98] ${saving ? "bg-slate-300" : "bg-cyan-400 shadow-cyan-100"
+          className={`flex h-16 w-full items-center justify-center gap-2 border-2 border-black font-display font-bold uppercase tracking-widest text-white shadow-[4px_4px_0px_0px_#000] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none active:translate-x-0.5 active:translate-y-0.5 active:shadow-none dark:border-white dark:shadow-[4px_4px_0px_0px_#fff] ${saving ? "bg-slate-300" : "bg-brand-500 hover:bg-black dark:bg-brand-600 dark:hover:bg-white dark:hover:text-black"
             }`}
         >
           {saving ? "Submitting..." : (

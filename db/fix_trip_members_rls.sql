@@ -6,6 +6,7 @@ drop policy if exists "profiles_insert_own" on public.profiles;
 drop policy if exists "profiles_update_own" on public.profiles;
 drop policy if exists "profiles_select_members" on public.profiles;
 drop policy if exists "profiles_select_all" on public.profiles;
+drop policy if exists "profiles_select_authenticated" on public.profiles;
 
 drop policy if exists "trips_select_members" on public.trips;
 drop policy if exists "trips_insert_creator" on public.trips;
@@ -19,8 +20,8 @@ drop policy if exists "trip_members_select_own" on public.trip_members;
 drop policy if exists "trip_members_select_via_trip" on public.trip_members;
 drop policy if exists "trip_members_insert_policy" on public.trip_members;
 
--- 2. Profiles: Allow global select (non-sensitive info, needed for lists)
-create policy "profiles_select_all" on public.profiles for select using (true);
+-- 2. Profiles: Allow authenticated users to select (needed for member lists)
+create policy "profiles_select_authenticated" on public.profiles for select to authenticated using (true);
 create policy "profiles_insert_own" on public.profiles for insert with check (id = auth.uid());
 create policy "profiles_update_own" on public.profiles for update using (id = auth.uid());
 

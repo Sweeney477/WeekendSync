@@ -84,33 +84,33 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
   }
 
   return (
-    <div className="flex flex-col gap-6 px-4 pb-24 pt-4">
-      <Card className="flex flex-col gap-4 rounded-3xl border-none bg-white p-6 shadow-sm">
+    <div className="flex flex-col gap-8 px-4 pb-24 pt-4">
+      <Card className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-brand-600">Group Status</span>
-          <span className="rounded-full bg-brand-50 px-3 py-1 text-[10px] font-bold text-brand-600">
+          <span className="font-display text-xs font-bold uppercase tracking-widest text-black dark:text-white">Group Status</span>
+          <span className="border-2 border-black bg-poster-yellow px-3 py-1 font-display text-xs font-bold uppercase tracking-widest text-black">
             {submittedCount}/{totalMembers} Joined
           </span>
         </div>
 
         <div className="flex flex-col gap-2">
-          <p className="text-sm font-bold text-slate-900">
+          <p className="font-sans text-sm font-bold text-black dark:text-white">
             Availability submitted by {submittedCount}/{totalMembers} friends
           </p>
-          <div className="h-2.5 w-full overflow-hidden rounded-full bg-slate-100">
+          <div className="h-4 w-full border-2 border-black bg-white p-0.5 dark:border-white dark:bg-zinc-900">
             <div
-              className="h-full bg-brand-400 transition-all duration-500"
+              className="h-full bg-poster-green transition-all duration-500"
               style={{ width: `${progress}%` }}
             />
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-[11px] text-slate-500">
-          <div className="flex h-4 w-4 items-center justify-center rounded-full bg-brand-100 text-brand-600">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
+          <div className="flex h-5 w-5 items-center justify-center border-2 border-black bg-poster-blue text-white dark:border-white">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="10"
-              height="10"
+              width="12"
+              height="12"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
@@ -124,48 +124,43 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
             </svg>
           </div>
           {submittedCount < totalMembers
-            ? "Almost there! Waiting on a few more friends."
-            : "Everyone is in! Time to move to the next phase."}
+            ? "Waiting on friends"
+            : "Everyone is in!"}
         </div>
       </Card>
 
-      <div className="relative overflow-hidden rounded-[32px] bg-slate-900 shadow-xl">
-        <img
-          src="https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?q=80&w=800&auto=format&fit=crop"
-          alt="Mountains"
-          className="h-48 w-full object-cover opacity-60"
-        />
-        <div className="absolute inset-0 flex flex-col justify-end bg-gradient-to-t from-black/80 to-transparent p-6">
-          <h2 className="text-xl font-bold text-white">Next Step: {nextStepTitle}</h2>
-          <p className="mt-1 text-sm text-slate-300">{nextStepDesc}</p>
-          <Link
-            href={nextStepHref}
-            className="mt-4 flex h-12 w-full items-center justify-center gap-2 rounded-xl bg-cyan-600 font-bold text-white shadow-lg transition-all active:scale-[0.98]"
-          >
-            Continue Planning
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="18"
-              height="18"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="5" x2="19" y1="12" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
-          </Link>
+      <div className="relative flex flex-col justify-end border-4 border-black bg-poster-blue p-6 shadow-[8px_8px_0px_0px_#000] dark:border-white dark:shadow-[8px_8px_0px_0px_#fff]">
+        <div className="flex flex-col gap-2">
+          <h2 className="font-display text-2xl font-bold uppercase tracking-tighter text-white">Next Step:<br />{nextStepTitle}</h2>
+          <p className="font-sans text-sm font-medium text-white/90">{nextStepDesc}</p>
         </div>
+        <Link
+          href={nextStepHref}
+          className="mt-6 flex h-14 w-full items-center justify-center gap-2 border-2 border-black bg-poster-yellow font-display text-lg font-bold uppercase tracking-widest text-black transition-all hover:bg-white hover:text-black active:translate-y-1"
+        >
+          Continue
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          >
+            <line x1="5" x2="19" y1="12" y2="12" />
+            <polyline points="12 5 19 12 12 19" />
+          </svg>
+        </Link>
       </div>
 
       {topWeekendDisplay || topDestinationData ? (
         <div className="grid grid-cols-2 gap-4">
           {topWeekendDisplay && (
-            <Card className="flex flex-col gap-3 rounded-[24px] border-none bg-white p-4 shadow-sm">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-50 text-brand-500">
+            <Card className="flex flex-col gap-3 p-4">
+              <div className="flex h-10 w-10 items-center justify-center border-2 border-black bg-poster-yellow text-black dark:border-white">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -184,15 +179,15 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
                 </svg>
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-slate-900">{topWeekendDisplay}</span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-brand-500">Top Weekend</span>
+                <span className="font-sans text-sm font-bold text-black dark:text-white">{topWeekendDisplay}</span>
+                <span className="font-display text-[10px] font-bold uppercase tracking-widest text-slate-500">Top Weekend</span>
               </div>
             </Card>
           )}
 
           {topDestinationData && (
-            <Card className="flex flex-col gap-3 rounded-[24px] border-none bg-white p-4 shadow-sm">
-              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-cyan-50 text-cyan-500">
+            <Card className="flex flex-col gap-3 p-4">
+              <div className="flex h-10 w-10 items-center justify-center border-2 border-black bg-poster-blue text-white dark:border-white">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -209,11 +204,10 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
                 </svg>
               </div>
               <div className="flex flex-col">
-                <span className="text-sm font-bold text-slate-900">
+                <span className="font-sans text-sm font-bold text-black dark:text-white">
                   {topDestinationData.city_name}
-                  {topDestinationData.country_code ? `, ${topDestinationData.country_code}` : ""}
                 </span>
-                <span className="text-[10px] font-bold uppercase tracking-wider text-cyan-500">Top Destination</span>
+                <span className="font-display text-[10px] font-bold uppercase tracking-widest text-slate-500">Top City</span>
               </div>
             </Card>
           )}
@@ -222,37 +216,37 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
 
       <div className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-base font-bold text-slate-900">Planning Squad</h2>
-          <span className="text-xs font-bold text-cyan-500">{totalMembers} total</span>
+          <h2 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">Planning Squad</h2>
+          <span className="font-display text-xs font-bold text-poster-blue">{totalMembers} total</span>
         </div>
         <div className="flex flex-col gap-3">
           {members?.map((member: any) => {
             // Skip members without profiles
             if (!member.profiles) return null;
-            
+
             const hasSubmitted = usersWhoSubmitted.has(member.profiles.id);
             const isCurrentUser = member.user_id === user.id;
             return (
-              <div key={member.profiles.id} className="flex items-center justify-between">
+              <div key={member.profiles.id} className="flex items-center justify-between border-2 border-black bg-white p-3 dark:border-white dark:bg-zinc-900">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 text-lg font-bold text-brand-600">
+                  <div className="flex h-10 w-10 items-center justify-center border-2 border-black bg-poster-orange font-display text-lg font-bold text-black dark:border-white">
                     {member.profiles.display_name?.[0].toUpperCase()}
                   </div>
                   <div className="flex flex-col">
-                    <span className="text-sm font-bold text-slate-900">
+                    <span className="font-sans text-sm font-bold text-black dark:text-white">
                       {member.profiles.display_name} {isCurrentUser ? "(You)" : ""}
                     </span>
-                    <span className="text-[11px] text-slate-500">
-                      {member.role === "organizer" ? "Organizer" : hasSubmitted ? "Submitted availability" : "Pending response"}
+                    <span className="font-display text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                      {member.role === "organizer" ? "Organizer" : hasSubmitted ? "Submitted" : "Pending"}
                     </span>
                   </div>
                 </div>
                 {hasSubmitted ? (
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500 text-white">
+                  <div className="flex h-8 w-8 items-center justify-center border-2 border-black bg-poster-green text-black dark:border-white">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="14"
+                      width="16"
+                      height="16"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"
@@ -264,11 +258,11 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
                     </svg>
                   </div>
                 ) : (
-                  <div className="flex h-6 w-6 items-center justify-center rounded-full bg-slate-200 text-white">
+                  <div className="flex h-8 w-8 items-center justify-center border-2 border-black bg-slate-100 text-slate-300 dark:border-white dark:bg-zinc-800">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
-                      width="14"
-                      height="14"
+                      width="16"
+                      height="16"
                       viewBox="0 0 24 24"
                       fill="none"
                       stroke="currentColor"

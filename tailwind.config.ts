@@ -22,7 +22,7 @@ export default {
         "poster-green": "#588E52",
         "poster-blue": "#336699",
         "poster-orange": "#F39200",
-        "background-light": "#F5F2E8", // Cream/Vintage paper
+        "background-light": "#EFE9D5", // More distinct vintage paper tone
         "background-dark": "#1A1A1A",
       },
       fontFamily: {

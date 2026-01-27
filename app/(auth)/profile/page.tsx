@@ -64,23 +64,48 @@ export default function ProfilePage() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-6 px-4 py-8 pb-24">
       <header className="flex items-start justify-between gap-4">
         <div className="flex flex-col gap-2">
-          <h1 className="text-2xl font-semibold">Profile</h1>
-          <p className="text-sm text-slate-600">Update your personal info for this WeekendSync account.</p>
+          <h1 className="font-display text-2xl font-bold uppercase tracking-wider text-black dark:text-white">Profile</h1>
+          <p className="font-sans text-sm text-slate-600 dark:text-slate-300">Update your personal info for this WeekendSync account.</p>
         </div>
-        <Link href="/" className="text-sm font-bold text-slate-400 underline decoration-slate-200">
+        <Link href="/" className="font-display text-sm font-bold uppercase tracking-widest text-slate-400 hover:text-black hover:underline dark:hover:text-white">
           Home
         </Link>
       </header>
 
-      <Card className="flex flex-col gap-3">
-        <Input label="Your name" placeholder="e.g. Sam" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-        <Input label="Home city (optional)" placeholder="e.g. Chicago" value={homeCity} onChange={(e) => setHomeCity(e.target.value)} />
-        <Button onClick={onSave} isLoading={isSaving} disabled={!displayName}>
-          Save changes
-        </Button>
-        {error ? <p className="text-sm text-rose-700">{error}</p> : null}
-        {success ? <p className="text-sm text-emerald-700">{success}</p> : null}
-      </Card>
+      <div className="flex flex-col gap-4 border-4 border-black bg-white p-6 dark:border-white dark:bg-zinc-900 shadow-[8px_8px_0px_0px_#000] dark:shadow-[8px_8px_0px_0px_#fff]">
+        <div className="flex flex-col gap-2">
+          <label className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Your name</label>
+          <input
+            type="text"
+            placeholder="e.g. Sam"
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+            className="w-full border-2 border-black bg-transparent p-3 font-display text-lg font-bold uppercase tracking-widest placeholder:text-zinc-300 focus:bg-poster-yellow focus:outline-none dark:border-white dark:focus:bg-zinc-800"
+          />
+        </div>
+
+        <div className="flex flex-col gap-2">
+          <label className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Home city (optional)</label>
+          <input
+            type="text"
+            placeholder="e.g. Chicago"
+            value={homeCity}
+            onChange={(e) => setHomeCity(e.target.value)}
+            className="w-full border-2 border-black bg-transparent p-3 font-display text-lg font-bold uppercase tracking-widest placeholder:text-zinc-300 focus:bg-poster-yellow focus:outline-none dark:border-white dark:focus:bg-zinc-800"
+          />
+        </div>
+
+        <button
+          onClick={onSave}
+          disabled={!displayName || isSaving}
+          className="mt-2 w-full border-2 border-black bg-brand-500 p-4 font-display text-lg font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-50 dark:border-white dark:hover:shadow-[4px_4px_0px_0px_#fff]"
+        >
+          {isSaving ? "Saving..." : "Save changes"}
+        </button>
+
+        {error ? <p className="font-display text-sm font-bold uppercase tracking-wider text-rose-600">{error}</p> : null}
+        {success ? <p className="font-display text-sm font-bold uppercase tracking-wider text-emerald-600">{success}</p> : null}
+      </div>
     </main>
   );
 }

@@ -332,7 +332,7 @@ export function HomeClient() {
           <button
             onClick={onJoinTrip}
             disabled={!inviteCode || loading}
-            className="w-full bg-primary px-6 py-5 font-display text-xl font-bold uppercase tracking-widest text-white transition-all hover:bg-black active:translate-y-1 disabled:opacity-50 dark:text-black dark:hover:bg-white"
+            className="w-full border-4 border-black bg-brand-500 px-6 py-5 font-display text-xl font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white active:translate-y-1 disabled:opacity-50 dark:border-white dark:text-black dark:hover:bg-white"
           >
             {loading ? "Loading..." : "Join Trip"}
           </button>

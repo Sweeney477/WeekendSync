@@ -21,15 +21,15 @@ export function Button({
   return (
     <button
       className={clsx(
-        "inline-flex items-center justify-center gap-2 rounded-xl font-medium transition",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-500 focus-visible:ring-offset-2",
-        size === "md" && "h-11 px-4 text-sm",
-        size === "lg" && "h-12 px-5 text-base",
-        variant === "primary" && "bg-brand-600 text-white hover:bg-brand-700 disabled:bg-slate-300",
+        "inline-flex items-center justify-center gap-2 border-2 px-6 py-3 font-display font-bold uppercase tracking-widest transition-all active:translate-y-0.5 disabled:opacity-50 disabled:active:translate-y-0",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 dark:focus-visible:ring-white",
+        size === "md" && "h-12 text-sm",
+        size === "lg" && "h-14 text-base",
+        variant === "primary" && "border-black bg-primary text-white hover:bg-black dark:border-white dark:text-black dark:hover:bg-white",
         variant === "secondary" &&
-          "bg-slate-100 text-slate-900 hover:bg-slate-200 disabled:bg-slate-100 disabled:text-slate-400",
-        variant === "ghost" && "bg-transparent text-slate-900 hover:bg-slate-100 disabled:text-slate-400",
-        variant === "danger" && "bg-rose-600 text-white hover:bg-rose-700 disabled:bg-slate-300",
+        "border-black bg-white text-black hover:bg-poster-yellow dark:border-white dark:bg-zinc-900 dark:text-white dark:hover:bg-poster-yellow dark:hover:text-black",
+        variant === "ghost" && "border-transparent bg-transparent text-black hover:bg-poster-yellow/20 dark:text-white dark:hover:bg-white/10",
+        variant === "danger" && "border-black bg-rose-600 text-white hover:bg-black dark:border-white",
         "disabled:cursor-not-allowed",
         className,
       )}

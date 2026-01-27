@@ -20,7 +20,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${spaceGrotesk.variable} min-h-dvh bg-background-light font-sans text-black antialiased transition-colors duration-300 dark:bg-background-dark dark:text-white`}>
+      <body className={`${inter.variable} ${spaceGrotesk.variable} min-h-dvh bg-background-light bg-noise font-sans text-black antialiased transition-colors duration-300 dark:bg-background-dark dark:text-white`}>
         {children}
       </body>
     </html>

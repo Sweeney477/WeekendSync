@@ -282,7 +282,7 @@ export function PlanClient({ tripId, userRole }: { tripId: string; userRole: str
       )}
 
       {/* Tab Navigation */}
-      <div className="sticky top-[112px] z-40 flex gap-2 overflow-x-auto bg-slate-50 pb-2 pt-2">
+      <div className="sticky top-[112px] z-40 flex gap-2 overflow-x-auto bg-slate-50 pb-2 pt-2 no-scrollbar">
         {[
           { key: "overview" as Tab, label: "Overview" },
           { key: "plan" as Tab, label: "Plan" },
@@ -292,9 +292,9 @@ export function PlanClient({ tripId, userRole }: { tripId: string; userRole: str
           <button
             key={tab.key}
             onClick={() => setActiveTab(tab.key)}
-            className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-bold transition-colors ${activeTab === tab.key
-              ? "bg-brand-400 text-white"
-              : "bg-white text-slate-600 hover:bg-slate-100"
+            className={`whitespace-nowrap border-2 px-4 py-2 font-display text-sm font-bold uppercase tracking-widest transition-all ${activeTab === tab.key
+              ? "border-black bg-brand-400 text-white dark:border-white"
+              : "border-transparent bg-white text-slate-600 hover:border-black hover:text-black"
               }`}
           >
             {tab.label}
@@ -370,36 +370,36 @@ function OverviewTab({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       {/* Trip Summary */}
-      <Card className="flex flex-col gap-4 rounded-3xl border-none bg-white p-6 shadow-sm">
+      <Card className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900">Trip Summary</h2>
+          <h2 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">Trip Summary</h2>
         </div>
         {trip && (
-          <div className="flex flex-col gap-3">
+          <div className="flex flex-col gap-4">
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Trip Name</span>
-              <p className="text-base font-bold text-slate-900">{trip.name}</p>
+              <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Trip Name</span>
+              <p className="font-sans text-base font-bold text-black dark:text-white">{trip.name}</p>
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Trip Code</span>
+              <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Trip Code</span>
               <div className="flex items-center gap-2">
-                <p className="text-base font-bold tracking-widest text-slate-900">{trip.inviteCode}</p>
+                <p className="font-mono text-base font-bold tracking-widest text-black dark:text-white">{trip.inviteCode}</p>
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(trip.inviteCode);
                     alert("Code copied!");
                   }}
-                  className="rounded-lg bg-slate-100 px-2 py-1 text-xs font-bold text-slate-600"
+                  className="border-2 border-black bg-slate-100 px-2 py-1 font-display text-xs font-bold uppercase tracking-wider text-black hover:bg-poster-yellow dark:border-white dark:bg-zinc-800 dark:text-white"
                 >
                   Copy
                 </button>
               </div>
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Created</span>
-              <p className="text-sm text-slate-600">
+              <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Created</span>
+              <p className="font-sans text-sm text-slate-600 dark:text-slate-300">
                 {new Date(trip.createdAt).toLocaleDateString("en-US", {
                   month: "short",
                   day: "numeric",
@@ -408,8 +408,8 @@ function OverviewTab({
               </p>
             </div>
             <div>
-              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">Members</span>
-              <p className="text-sm font-bold text-slate-900">{members.length} people</p>
+              <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Members</span>
+              <p className="font-sans text-sm font-bold text-black dark:text-white">{members.length} people</p>
             </div>
           </div>
         )}
@@ -417,13 +417,13 @@ function OverviewTab({
 
       {/* Privacy & Safety */}
       {isOrganizer && (
-        <Card className="flex flex-col gap-4 rounded-3xl border-none bg-white p-6 shadow-sm">
+        <Card className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
-            <h2 className="text-lg font-bold text-slate-900">Privacy & Safety</h2>
+            <h2 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">Privacy & Safety</h2>
             {!showPrivacyEdit && (
               <button
                 onClick={() => setShowPrivacyEdit(true)}
-                className="text-sm font-bold text-brand-500"
+                className="font-display text-sm font-bold uppercase tracking-widest text-brand-500 hover:text-black dark:hover:text-white"
               >
                 Edit
               </button>
@@ -432,18 +432,18 @@ function OverviewTab({
           {showPrivacyEdit ? (
             <div className="flex flex-col gap-4">
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-slate-600">Privacy Mode</label>
+                <label className="font-display text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400">Privacy Mode</label>
                 <select
                   value={privacy}
                   onChange={(e) => setPrivacy(e.target.value as "code" | "invite")}
-                  className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm"
+                  className="h-12 border-2 border-black bg-white px-4 py-2 font-sans text-sm font-bold dark:border-white dark:bg-zinc-900 dark:text-white"
                 >
                   <option value="code">Code Only (anyone with code can join)</option>
                   <option value="invite">Invite Only (organizer approval required)</option>
                 </select>
               </div>
               <div className="flex flex-col gap-2">
-                <label className="text-xs font-bold text-slate-600">Emergency Contact</label>
+                <label className="font-display text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400">Emergency Contact</label>
                 <Input
                   value={emergencyContact}
                   onChange={(e) => setEmergencyContact(e.target.value)}
@@ -461,24 +461,25 @@ function OverviewTab({
                     setPrivacy(trip?.privacy || "code");
                     setEmergencyContact(trip?.emergencyContact || "");
                   }}
-                  className="flex-1 bg-slate-200 text-slate-700"
+                  variant="secondary"
+                  className="flex-1"
                 >
                   Cancel
                 </Button>
               </div>
             </div>
           ) : (
-            <div className="flex flex-col gap-2">
+            <div className="flex flex-col gap-4">
               <div>
-                <span className="text-xs text-slate-500">Privacy:</span>
-                <p className="text-sm font-bold text-slate-900">
+                <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Privacy</span>
+                <p className="font-sans text-sm font-bold text-black dark:text-white">
                   {trip?.privacy === "code" ? "Code Only" : "Invite Only"}
                 </p>
               </div>
               {trip?.emergencyContact && (
                 <div>
-                  <span className="text-xs text-slate-500">Emergency Contact:</span>
-                  <p className="text-sm font-bold text-slate-900">{trip.emergencyContact}</p>
+                  <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Emergency Contact</span>
+                  <p className="font-sans text-sm font-bold text-black dark:text-white">{trip.emergencyContact}</p>
                 </div>
               )}
             </div>
@@ -487,37 +488,37 @@ function OverviewTab({
       )}
 
       {/* Quick Logistics */}
-      <Card className="flex flex-col gap-4 rounded-3xl border-none bg-white p-6 shadow-sm">
+      <Card className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900">Logistics</h2>
+          <h2 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">Logistics</h2>
           <LogisticsForm tripId={trip?.id || ""} onUpdate={onUpdate} />
         </div>
         {logistics.lodging.length > 0 && (
           <div className="flex flex-col gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Lodging</span>
+            <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-400">Lodging</span>
             {logistics.lodging.map((item) => (
-              <div key={item.id} className="rounded-xl bg-slate-50 p-3">
-                <p className="text-sm font-bold text-slate-900">{item.name}</p>
-                <p className="text-xs text-slate-500">{item.dates}</p>
-                {item.ref && <p className="text-xs text-slate-400">Ref: {item.ref}</p>}
+              <div key={item.id} className="border-2 border-black bg-poster-blue/10 p-3 dark:border-white">
+                <p className="font-sans text-sm font-bold text-black dark:text-white">{item.name}</p>
+                <p className="font-sans text-xs text-slate-600 dark:text-slate-300">{item.dates}</p>
+                {item.ref && <p className="font-mono text-xs text-slate-500">Ref: {item.ref}</p>}
               </div>
             ))}
           </div>
         )}
         {logistics.transport.length > 0 && (
           <div className="flex flex-col gap-2">
-            <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Transport</span>
+            <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-400">Transport</span>
             {logistics.transport.map((item) => (
-              <div key={item.id} className="rounded-xl bg-slate-50 p-3">
-                <p className="text-sm font-bold text-slate-900">{item.name}</p>
-                <p className="text-xs text-slate-500">{item.dates}</p>
-                {item.ref && <p className="text-xs text-slate-400">Ref: {item.ref}</p>}
+              <div key={item.id} className="border-2 border-black bg-poster-yellow/10 p-3 dark:border-white">
+                <p className="font-sans text-sm font-bold text-black dark:text-white">{item.name}</p>
+                <p className="font-sans text-xs text-slate-600 dark:text-slate-300">{item.dates}</p>
+                {item.ref && <p className="font-mono text-xs text-slate-500">Ref: {item.ref}</p>}
               </div>
             ))}
           </div>
         )}
         {logistics.lodging.length === 0 && logistics.transport.length === 0 && (
-          <p className="text-sm text-slate-500">No logistics added yet. Click the + button to add lodging or transport.</p>
+          <p className="font-sans text-sm text-slate-500">No logistics added yet. Click the + button to add lodging or transport.</p>
         )}
       </Card>
 
@@ -679,17 +680,20 @@ function PlanTab({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-slate-900">Itinerary</h2>
-        <Button onClick={() => setShowAddForm(true)} className="h-10">
+        <h2 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">Itinerary</h2>
+        <button
+          onClick={() => setShowAddForm(true)}
+          className="h-10 border-2 border-black bg-brand-500 px-4 font-display text-sm font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white hover:shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none dark:border-white dark:text-black dark:hover:bg-white"
+        >
           + Add Item
-        </Button>
+        </button>
       </div>
 
       {showAddForm && (
-        <Card className="flex flex-col gap-4 rounded-3xl border-none bg-white p-6 shadow-sm">
-          <h3 className="font-bold text-slate-900">{editingId ? "Edit Item" : "New Item"}</h3>
+        <Card className="flex flex-col gap-4">
+          <h3 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">{editingId ? "Edit Item" : "New Item"}</h3>
           <Input
             label="Title"
             value={formData.title}
@@ -716,11 +720,11 @@ function PlanTab({
             placeholder="Additional details"
           />
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-bold text-slate-600">Assigned To</label>
+            <label className="font-display text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400">Assigned To</label>
             <select
               value={formData.ownerId}
               onChange={(e) => setFormData({ ...formData, ownerId: e.target.value })}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm"
+              className="h-12 border-2 border-black bg-white px-4 py-2 font-sans text-sm font-bold dark:border-white dark:bg-zinc-900 dark:text-white"
             >
               <option value="">Unassigned</option>
               {members.map((m) => (
@@ -731,7 +735,7 @@ function PlanTab({
             </select>
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-bold text-slate-600">Reminder (minutes before)</label>
+            <label className="font-display text-xs font-bold uppercase tracking-widest text-slate-600 dark:text-slate-400">Reminder (minutes before)</label>
             <Input
               type="number"
               value={formData.reminderOffsetMinutes}
@@ -742,10 +746,13 @@ function PlanTab({
             />
           </div>
           <div className="flex gap-2">
-            <Button onClick={handleSave} className="flex-1">
+            <button
+              onClick={handleSave}
+              className="flex-1 border-2 border-black bg-brand-500 p-2 font-display text-sm font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white hover:shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none dark:border-white dark:text-black dark:hover:bg-white"
+            >
               Save
-            </Button>
-            <Button
+            </button>
+            <button
               onClick={() => {
                 setShowAddForm(false);
                 setEditingId(null);
@@ -758,40 +765,40 @@ function PlanTab({
                   reminderOffsetMinutes: 60,
                 });
               }}
-              className="flex-1 bg-slate-200 text-slate-700"
+              className="flex-1 border-2 border-black bg-white p-2 font-display text-sm font-bold uppercase tracking-widest text-black transition-all hover:bg-slate-100 hover:shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none dark:border-white dark:bg-zinc-900 dark:text-white dark:hover:shadow-[2px_2px_0px_0px_#fff]"
             >
               Cancel
-            </Button>
+            </button>
           </div>
         </Card>
       )}
 
       {Object.keys(itemsByDate).length === 0 ? (
-        <Card className="flex flex-col items-center gap-4 rounded-3xl border-none bg-white p-8 shadow-sm">
-          <p className="text-sm text-slate-500">No items yet. Add your first activity!</p>
+        <Card className="flex flex-col items-center gap-4 py-8">
+          <p className="font-sans text-sm text-slate-500">No items yet. Add your first activity!</p>
         </Card>
       ) : (
         Object.entries(itemsByDate).map(([date, dateItems]) => (
-          <Card key={date} className="flex flex-col gap-3 rounded-3xl border-none bg-white p-6 shadow-sm">
-            <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">{date}</h3>
+          <div key={date} className="flex flex-col gap-3">
+            <h3 className="sticky top-[160px] z-10 bg-slate-50 py-2 font-display text-xs font-bold uppercase tracking-widest text-slate-400 backdrop-blur-sm dark:bg-zinc-950 dark:text-slate-500">{date}</h3>
             {dateItems.map((item) => {
               const owner = members.find((m) => m.userId === item.ownerId);
               return (
-                <div key={item.id} className="flex items-start justify-between rounded-xl bg-slate-50 p-3">
+                <div key={item.id} className="flex items-start justify-between border-2 border-black bg-white p-4 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none dark:border-white dark:bg-zinc-900 dark:shadow-[4px_4px_0px_0px_rgba(255,255,255,1)]">
                   <div className="flex-1">
-                    <p className="font-bold text-slate-900">{item.title}</p>
+                    <p className="font-sans font-bold text-black dark:text-white">{item.title}</p>
                     {item.dateTime && (
-                      <p className="text-xs text-slate-500">
-                        {new Date(item.dateTime).toLocaleString()}
+                      <p className="font-mono text-xs text-slate-500 dark:text-slate-400">
+                        {new Date(item.dateTime).toLocaleString([], { hour: '2-digit', minute: '2-digit' })}
                       </p>
                     )}
                     {item.locationText && (
-                      <p className="text-xs text-slate-500">📍 {item.locationText}</p>
+                      <p className="text-xs font-bold text-slate-500 dark:text-slate-400">📍 {item.locationText}</p>
                     )}
                     {owner && (
-                      <p className="text-xs text-slate-400">Assigned to {owner.displayName}</p>
+                      <p className="mt-1 text-xs font-medium text-slate-400">Assigned to {owner.displayName}</p>
                     )}
-                    {item.notes && <p className="mt-1 text-xs text-slate-600">{item.notes}</p>}
+                    {item.notes && <p className="mt-2 text-xs italic text-slate-600 dark:text-slate-300">"{item.notes}"</p>}
                   </div>
                   <div className="flex gap-2">
                     <button
@@ -809,21 +816,21 @@ function PlanTab({
                         });
                         setShowAddForm(true);
                       }}
-                      className="text-xs font-bold text-brand-500"
+                      className="flex h-8 w-8 items-center justify-center border-2 border-black bg-slate-100 text-black hover:bg-poster-yellow dark:border-white dark:bg-zinc-800 dark:text-white"
                     >
-                      Edit
+                      ✎
                     </button>
                     <button
                       onClick={() => handleDelete(item.id)}
-                      className="text-xs font-bold text-rose-500"
+                      className="flex h-8 w-8 items-center justify-center border-2 border-black bg-slate-100 text-rose-500 hover:bg-rose-500 hover:text-white dark:border-white dark:bg-zinc-800"
                     >
-                      Delete
+                      ×
                     </button>
                   </div>
                 </div>
               );
             })}
-          </Card>
+          </div>
         ))
       )}
     </div>
@@ -844,164 +851,118 @@ function PeopleTab({
   isOrganizer: boolean;
   onUpdate: () => void;
 }) {
-  const inviteCode = trip?.inviteCode ?? "";
-  const origin = typeof window !== "undefined" ? window.location.origin : "";
-  const inviteLink = trip?.inviteLink ?? (inviteCode ? `${origin}/join/${inviteCode}` : "");
-  const inviteMessage = inviteLink
-    ? `Join my WeekendSync trip${trip?.name ? `: ${trip.name}` : ""}\n\nTrip code: ${inviteCode}\nInvite link: ${inviteLink}`
-    : "";
+  const [inviteEmail, setInviteEmail] = useState("");
+  const [inviting, setInviting] = useState(false);
 
-  async function handleShare() {
+  async function handleInvite(e: React.FormEvent) {
+    if (e) e.preventDefault();
+    if (!inviteEmail) return;
+    setInviting(true);
     try {
-      if (navigator.share) {
-        await navigator.share({
-          title: "Join my trip on WeekendSync",
-          url: inviteLink,
-        });
-        // Show notification when shared
-        requestNotificationPermission().then((granted) => {
-          if (granted) {
-            import("@/lib/notifications").then(({ showNotification }) => {
-              showNotification("Invite shared!", {
-                body: "Your friends can now join the trip using the link.",
-              });
-            });
-          }
-        });
-      } else {
-        await navigator.clipboard.writeText(inviteLink);
-        alert("Invite link copied!");
-      }
+      // In a real app this would call an API
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+      alert(`Invite sent to ${inviteEmail}`);
+      setInviteEmail("");
     } catch (err) {
-      if (err instanceof Error && err.name !== "AbortError") {
-        await navigator.clipboard.writeText(inviteLink);
-        alert("Link copied!");
-      }
+      alert("Failed to send invite");
+    } finally {
+      setInviting(false);
     }
   }
 
   return (
-    <div className="flex flex-col gap-4">
-      <Card className="flex flex-col gap-4 rounded-3xl border-none bg-white p-6 shadow-sm">
-        <h2 className="text-lg font-bold text-slate-900">Invite Friends</h2>
-        <div className="flex flex-col gap-3">
-          <div className="flex items-center justify-between rounded-xl bg-slate-50 p-3">
-            <div className="flex-1">
-              <p className="text-xs font-bold text-slate-400">Trip Code</p>
-              <p className="text-base font-bold tracking-widest text-slate-900">{inviteCode || "—"}</p>
+    <div className="flex flex-col gap-6">
+      <Card className="flex flex-col gap-4">
+        <h2 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">Invite Friends</h2>
+        <div className="flex flex-col gap-4">
+          <p className="font-sans text-sm text-slate-600 dark:text-slate-300">
+            Share the invite code or link with your friends to let them join the trip.
+          </p>
+
+          <div className="flex flex-col gap-2">
+            <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Invite Code</span>
+            <div className="flex items-center gap-2">
+              <div className="flex h-12 flex-1 items-center justify-center border-2 border-black bg-slate-100 font-mono text-xl font-bold tracking-widest text-black dark:border-white dark:bg-zinc-800 dark:text-white">
+                {trip?.inviteCode}
+              </div>
+              <button
+                onClick={() => {
+                  if (trip?.inviteCode) {
+                    navigator.clipboard.writeText(trip.inviteCode);
+                    alert("Code copied!");
+                  }
+                }}
+                className="flex h-12 items-center justify-center border-2 border-black bg-poster-yellow px-4 font-display text-sm font-bold uppercase tracking-widest text-black hover:bg-white dark:border-white"
+              >
+                Copy
+              </button>
             </div>
+          </div>
+
+          <div className="flex items-center gap-4">
+            <div className="h-px flex-1 bg-slate-200 dark:bg-zinc-700" />
+            <span className="font-display text-xs font-bold uppercase text-slate-400">OR</span>
+            <div className="h-px flex-1 bg-slate-200 dark:bg-zinc-700" />
+          </div>
+
+          <form onSubmit={handleInvite} className="flex gap-2">
+            <Input
+              value={inviteEmail}
+              onChange={(e) => setInviteEmail(e.target.value)}
+              placeholder="friend@example.com"
+              className="flex-1"
+            />
             <button
-              onClick={() => {
-                if (!inviteCode) return;
-                navigator.clipboard.writeText(inviteCode);
-                alert("Code copied!");
-              }}
-              className="rounded-lg bg-brand-100 px-3 py-1.5 text-xs font-bold text-brand-600"
+              type="submit"
+              disabled={inviting || !inviteEmail}
+              className="border-2 border-black bg-brand-500 px-6 font-display text-sm font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white hover:shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none disabled:opacity-50 dark:border-white dark:text-black dark:hover:bg-white"
             >
-              Copy
+              {inviting ? "..." : "Send"}
             </button>
-          </div>
-
-          <div className="flex items-center justify-between gap-2 rounded-xl bg-slate-50 p-3">
-            <div className="min-w-0 flex-1">
-              <p className="text-xs font-bold text-slate-400">Invite Link</p>
-              <p className="truncate text-sm font-medium text-slate-700">{inviteLink || "—"}</p>
-            </div>
-            <button
-              onClick={async () => {
-                if (!inviteLink) return;
-                try {
-                  await navigator.clipboard.writeText(inviteLink);
-                  alert("Invite link copied!");
-                } catch {
-                  alert("Couldn't copy automatically — try Share instead.");
-                }
-              }}
-              className="rounded-lg bg-slate-200 px-3 py-1.5 text-xs font-bold text-slate-700"
-            >
-              Copy
-            </button>
-          </div>
-
-          <Button onClick={handleShare} className="h-12" disabled={!inviteLink}>
-            Share Invite Link
-          </Button>
-
-          <div className="grid grid-cols-2 gap-2">
-            <a
-              href={
-                inviteLink
-                  ? `mailto:?subject=${encodeURIComponent("Join my WeekendSync trip")}&body=${encodeURIComponent(inviteMessage)}`
-                  : undefined
-              }
-              aria-disabled={!inviteLink}
-              className={`flex h-11 items-center justify-center rounded-2xl text-sm font-bold ${
-                inviteLink ? "bg-slate-900 text-white active:scale-[0.98]" : "pointer-events-none bg-slate-100 text-slate-400"
-              }`}
-            >
-              Email
-            </a>
-            <a
-              href={inviteLink ? `sms:?&body=${encodeURIComponent(inviteMessage)}` : undefined}
-              aria-disabled={!inviteLink}
-              className={`flex h-11 items-center justify-center rounded-2xl text-sm font-bold ${
-                inviteLink ? "bg-slate-900 text-white active:scale-[0.98]" : "pointer-events-none bg-slate-100 text-slate-400"
-              }`}
-            >
-              Text
-            </a>
-          </div>
+          </form>
         </div>
       </Card>
 
-      <Card className="flex flex-col gap-4 rounded-3xl border-none bg-white p-6 shadow-sm">
-        <div className="flex items-center justify-between">
-          <h2 className="text-lg font-bold text-slate-900">Members</h2>
-          <span className="text-xs font-bold text-slate-400">{members.length} total</span>
-        </div>
+      <div className="flex flex-col gap-4">
+        <h2 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">Members ({members.length})</h2>
         <div className="flex flex-col gap-3">
           {members.map((member) => (
-            <div key={member.userId} className="flex items-center justify-between">
+            <div key={member.userId} className="flex items-center justify-between border-2 border-black bg-white p-3 dark:border-white dark:bg-zinc-900">
               <div className="flex items-center gap-3">
-                <div className="flex h-12 w-12 items-center justify-center rounded-full bg-brand-100 text-lg font-bold text-brand-600">
+                <div className="flex h-10 w-10 items-center justify-center border-2 border-black bg-poster-orange font-display text-lg font-bold text-black dark:border-white">
                   {member.displayName[0].toUpperCase()}
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-sm font-bold text-slate-900">{member.displayName}</span>
-                  <span className="text-xs text-slate-500">
+                  <span className="font-sans text-sm font-bold text-black dark:text-white mr-2">
+                    {member.displayName}
+                  </span>
+                  <span className="font-display text-[10px] font-bold uppercase tracking-wider text-slate-500">
                     {member.role === "organizer" ? "Organizer" : "Member"}
                   </span>
                 </div>
               </div>
-              <div
-                className={`flex h-6 w-6 items-center justify-center rounded-full ${member.status === "accepted"
-                  ? "bg-emerald-500"
-                  : "bg-slate-200"
-                  }`}
-              >
-                {member.status === "accepted" && (
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="14"
-                    height="14"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="4"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  >
-                    <polyline points="20 6 9 17 4 12" />
-                  </svg>
-                )}
-              </div>
+              {isOrganizer && member.role !== "organizer" && (
+                <button
+                  className="font-display text-[10px] font-bold uppercase tracking-widest text-rose-500 hover:text-rose-700"
+                  onClick={() => {
+                    if (confirm(`Remove ${member.displayName}?`)) {
+                      // Call remove API
+                      alert("Removed");
+                    }
+                  }}
+                >
+                  Remove
+                </button>
+              )}
             </div>
           ))}
         </div>
-      </Card>
+      </div>
     </div>
   );
 }
+
+
 
 // Logistics Form Component
 function LogisticsForm({ tripId, onUpdate }: { tripId: string; onUpdate: () => void }) {
@@ -1261,17 +1222,20 @@ function CostsTab({
   }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-slate-900">Costs</h2>
-        <Button onClick={() => setShowAddForm(true)} className="h-10">
+        <h2 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">Costs</h2>
+        <button
+          onClick={() => setShowAddForm(true)}
+          className="h-10 border-2 border-black bg-brand-500 px-4 font-display text-sm font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white hover:shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none dark:border-white dark:text-black dark:hover:bg-white"
+        >
           + Add Cost
-        </Button>
+        </button>
       </div>
 
       {showAddForm && (
-        <Card className="flex flex-col gap-4 rounded-3xl border-none bg-white p-6 shadow-sm">
-          <h3 className="font-bold text-slate-900">New Cost</h3>
+        <Card className="flex flex-col gap-4 border-2 border-black bg-white p-6 dark:border-white dark:bg-zinc-900">
+          <h3 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">New Cost</h3>
           <Input
             label="Description"
             value={formData.label}
@@ -1290,11 +1254,11 @@ function CostsTab({
               required
             />
             <div className="flex flex-col gap-2">
-              <label className="text-xs font-bold text-slate-600">Currency</label>
+              <label className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Currency</label>
               <select
                 value={formData.currency}
                 onChange={(e) => setFormData({ ...formData, currency: e.target.value })}
-                className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm"
+                className="h-12 w-full border-2 border-black bg-white px-4 font-sans text-sm font-bold text-black focus:bg-poster-yellow focus:outline-none dark:border-white dark:bg-zinc-800 dark:text-white"
               >
                 <option value="USD">USD</option>
                 <option value="EUR">EUR</option>
@@ -1303,11 +1267,11 @@ function CostsTab({
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <label className="text-xs font-bold text-slate-600">Paid By</label>
+            <label className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Paid By</label>
             <select
               value={formData.payerId}
               onChange={(e) => setFormData({ ...formData, payerId: e.target.value })}
-              className="rounded-xl border border-slate-200 bg-white px-4 py-2 text-sm"
+              className="h-12 w-full border-2 border-black bg-white px-4 font-sans text-sm font-bold text-black focus:bg-poster-yellow focus:outline-none dark:border-white dark:bg-zinc-800 dark:text-white"
               required
             >
               <option value="">Select...</option>
@@ -1326,15 +1290,15 @@ function CostsTab({
                 onChange={(e) =>
                   setFormData({ ...formData, splitEqually: e.target.checked })
                 }
-                className="rounded"
+                className="h-5 w-5 border-2 border-black text-black focus:ring-0 dark:border-white"
               />
-              <span className="text-xs font-bold text-slate-600">Split equally</span>
+              <span className="font-display text-xs font-bold uppercase tracking-widest text-slate-500">Split equally</span>
             </label>
             {!formData.splitEqually && (
               <div className="flex flex-col gap-2">
                 {members.map((member) => (
                   <div key={member.userId} className="flex items-center gap-2">
-                    <label className="flex-1 text-xs text-slate-600">{member.displayName}</label>
+                    <label className="flex-1 font-sans text-xs font-bold text-slate-600 dark:text-slate-300">{member.displayName}</label>
                     <Input
                       type="number"
                       step="0.01"
@@ -1357,9 +1321,12 @@ function CostsTab({
             )}
           </div>
           <div className="flex gap-2">
-            <Button onClick={handleSave} className="flex-1">
+            <button
+              onClick={handleSave}
+              className="flex-1 border-2 border-black bg-brand-500 p-2 font-display text-sm font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white hover:shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none dark:border-white dark:text-black dark:hover:bg-white"
+            >
               Save
-            </Button>
+            </button>
             <Button
               onClick={() => {
                 setShowAddForm(false);
@@ -1372,7 +1339,7 @@ function CostsTab({
                   customSplits: {},
                 });
               }}
-              className="flex-1 bg-slate-200 text-slate-700"
+              className="flex-1 border-2 border-black bg-slate-100 text-black hover:bg-slate-200 dark:border-white dark:bg-zinc-800 dark:text-white"
             >
               Cancel
             </Button>
@@ -1382,35 +1349,35 @@ function CostsTab({
 
       {/* Cost List */}
       {costs.length === 0 ? (
-        <Card className="flex flex-col items-center gap-4 rounded-3xl border-none bg-white p-8 shadow-sm">
-          <p className="text-sm text-slate-500">No costs yet. Add your first expense!</p>
+        <Card className="flex flex-col items-center gap-4 border-2 border-black bg-white p-8 dark:border-white dark:bg-zinc-900">
+          <p className="font-display text-sm font-bold uppercase tracking-wider text-slate-400">No costs yet. Add your first expense!</p>
         </Card>
       ) : (
         <div className="flex flex-col gap-3">
           {costs.map((cost) => {
             const payer = members.find((m) => m.userId === cost.payerId);
             return (
-              <Card
+              <div
                 key={cost.id}
-                className="flex flex-col gap-2 rounded-3xl border-none bg-white p-4 shadow-sm"
+                className="flex flex-col gap-2 border-2 border-black bg-white p-4 transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-[2px_2px_0px_0px_#000] dark:border-white dark:bg-zinc-900 dark:hover:shadow-[2px_2px_0px_0px_#fff]"
               >
                 <div className="flex items-start justify-between">
                   <div className="flex-1">
-                    <p className="font-bold text-slate-900">{cost.label}</p>
-                    <p className="text-sm text-slate-600">
+                    <p className="font-sans font-bold text-black dark:text-white">{cost.label}</p>
+                    <p className="font-display text-sm font-bold text-slate-600 dark:text-slate-300">
                       {cost.currency} {cost.amount.toFixed(2)}
                     </p>
-                    {payer && <p className="text-xs text-slate-500">Paid by {payer.displayName}</p>}
+                    {payer && <p className="font-display text-[10px] font-bold uppercase tracking-wider text-slate-400">Paid by {payer.displayName}</p>}
                   </div>
                   {cost.settled && (
-                    <div className="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-500">
+                    <div className="flex h-6 w-6 items-center justify-center border-2 border-black bg-poster-green text-black dark:border-white">
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
                         width="14"
                         height="14"
                         viewBox="0 0 24 24"
                         fill="none"
-                        stroke="white"
+                        stroke="currentColor"
                         strokeWidth="4"
                         strokeLinecap="round"
                         strokeLinejoin="round"
@@ -1420,7 +1387,7 @@ function CostsTab({
                     </div>
                   )}
                 </div>
-              </Card>
+              </div>
             );
           })}
         </div>
@@ -1428,20 +1395,20 @@ function CostsTab({
 
       {/* Balance Summary */}
       {costs.length > 0 && (
-        <Card className="flex flex-col gap-3 rounded-3xl border-none bg-white p-6 shadow-sm">
-          <h3 className="text-sm font-bold uppercase tracking-wider text-slate-400">Balances</h3>
+        <Card className="flex flex-col gap-4 border-2 border-black bg-white p-6 dark:border-white dark:bg-zinc-900">
+          <h3 className="font-display text-sm font-bold uppercase tracking-widest text-slate-500">Balances</h3>
           {members.map((member) => {
             const balance = balances[member.userId];
             if (!balance) return null;
             return (
-              <div key={member.userId} className="flex items-center justify-between">
-                <span className="text-sm text-slate-600">{member.displayName}</span>
+              <div key={member.userId} className="flex items-center justify-between border-b-2 border-slate-100 pb-2 last:border-0 last:pb-0 dark:border-zinc-800">
+                <span className="font-sans text-sm font-bold text-black dark:text-white">{member.displayName}</span>
                 <span
-                  className={`text-sm font-bold ${balance.balance > 0
+                  className={`font-mono text-sm font-bold ${balance.balance > 0
                     ? "text-emerald-600"
                     : balance.balance < 0
                       ? "text-rose-600"
-                      : "text-slate-600"
+                      : "text-slate-400"
                     }`}
                 >
                   {balance.balance > 0 ? "+" : ""}

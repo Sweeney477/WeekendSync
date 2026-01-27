@@ -458,7 +458,10 @@ create or replace trigger on_auth_user_created
 
 -- profiles linkage
 drop policy if exists "profiles_select_own" on public.profiles;
-create policy "profiles_select_own" on public.profiles for select using (id = auth.uid());
+drop policy if exists "profiles_select_all" on public.profiles;
+drop policy if exists "profiles_select_members" on public.profiles;
+drop policy if exists "profiles_select_authenticated" on public.profiles;
+create policy "profiles_select_authenticated" on public.profiles for select to authenticated using (true);
 
 drop policy if exists "profiles_insert_own" on public.profiles;
 create policy "profiles_insert_own" on public.profiles for insert with check (id = auth.uid());
