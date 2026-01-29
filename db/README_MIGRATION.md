@@ -1,3 +1,13 @@
+# Database Migrations
+
+## Profiles RLS (fix "Unknown" members in trip People list)
+
+If trip members show as "Unknown" in the People tab, the `profiles` table likely still has a policy that only lets users read their own profile. The members API needs to read all trip members' profiles to show names.
+
+**Run once (Supabase Dashboard → SQL Editor):** paste and run the contents of `db/migration_profiles_rls.sql`. This allows authenticated users to read all profile rows (SELECT only; INSERT/UPDATE remain owner-only).
+
+---
+
 # Trip Planning MVP Migration
 
 ## Overview

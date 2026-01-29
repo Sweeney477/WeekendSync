@@ -22,7 +22,14 @@ export function SignInClient() {
     try {
       const { createBrowserSupabaseClient } = await import("@/lib/supabase/browser");
       const supabase = createBrowserSupabaseClient();
-      
+
+      // Persist inviteCode/next in a cookie so the auth callback still has them after the
+      // magic-link redirect (Supabase/whitelist often strips query params from redirect URL).
+      if (inviteCode || next) {
+        const payload = encodeURIComponent(JSON.stringify({ inviteCode: inviteCode || "", next }));
+        document.cookie = `pending_join=${payload}; path=/; max-age=600; SameSite=Lax`;
+      }
+
       const callbackUrl = new URL(`${window.location.origin}/auth/callback`);
       if (inviteCode) callbackUrl.searchParams.set("inviteCode", inviteCode);
       if (next) callbackUrl.searchParams.set("next", next);

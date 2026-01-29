@@ -104,6 +104,17 @@ export function HomeClient() {
 
   async function onJoinTrip() {
     setActionError(null);
+
+    // Guest or incomplete profile: send to sign-in or onboarding so they can join after auth
+    if (!isAuthed) {
+      router.push(`/sign-in?inviteCode=${encodeURIComponent(inviteCode)}`);
+      return;
+    }
+    if (needsOnboarding) {
+      router.push(`/onboarding?inviteCode=${encodeURIComponent(inviteCode)}`);
+      return;
+    }
+
     setLoading(true);
     try {
       const res = await fetch("/api/trips/join", {
