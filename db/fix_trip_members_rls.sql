@@ -20,8 +20,24 @@ drop policy if exists "trip_members_select_own" on public.trip_members;
 drop policy if exists "trip_members_select_via_trip" on public.trip_members;
 drop policy if exists "trip_members_insert_policy" on public.trip_members;
 
--- 2. Profiles: Allow authenticated users to select (needed for member lists)
-create policy "profiles_select_authenticated" on public.profiles for select to authenticated using (true);
+-- 2. Profiles: Allow only shared-trip access + public view for display names
+drop view if exists public.public_profiles;
+create view public.public_profiles as
+select id, display_name
+from public.profiles;
+grant select on public.public_profiles to authenticated;
+create policy "profiles_select_own" on public.profiles for select to authenticated using (id = auth.uid());
+create policy "profiles_select_shared_trip" on public.profiles
+  for select to authenticated
+  using (
+    exists (
+      select 1
+      from public.trip_members tm_self
+      join public.trip_members tm_other on tm_other.trip_id = tm_self.trip_id
+      where tm_self.user_id = auth.uid()
+        and tm_other.user_id = profiles.id
+    )
+  );
 create policy "profiles_insert_own" on public.profiles for insert with check (id = auth.uid());
 create policy "profiles_update_own" on public.profiles for update using (id = auth.uid());
 
@@ -46,4 +62,3 @@ grant execute on function public.is_trip_member(uuid) to authenticated;
 grant execute on function public.is_trip_organizer(uuid) to authenticated;
 grant execute on function public.create_trip(text, date, int, text, int) to authenticated;
 grant execute on function public.join_trip_by_invite(text) to authenticated;
-

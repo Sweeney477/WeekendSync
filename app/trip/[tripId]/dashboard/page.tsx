@@ -18,16 +18,24 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
   // 2. Fetch Members and their status
   const { data: members } = await supabase
     .from("trip_members")
-    .select(`
-      role,
-      joined_at,
-      user_id,
-      profiles (
-        id,
-        display_name
-      )
-    `)
+    .select("role, joined_at, user_id")
     .eq("trip_id", tripId);
+
+  const memberIds = (members ?? []).map((m) => m.user_id).filter(Boolean);
+  const { data: profiles } = memberIds.length
+    ? await supabase
+        .from("public_profiles")
+        .select("id, display_name")
+        .in("id", memberIds)
+    : { data: [] as Array<{ id: string; display_name: string }> };
+
+  const profileMap = new Map<string, { id: string; displayName: string }>();
+  for (const profile of profiles ?? []) {
+    profileMap.set(profile.id as string, {
+      id: profile.id as string,
+      displayName: (profile.display_name as string) || "Unknown",
+    });
+  }
 
   // 3. Fetch Availability counts
   const { data: availability } = await supabase
@@ -221,20 +229,20 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
         </div>
         <div className="flex flex-col gap-3">
           {members?.map((member: any) => {
-            // Skip members without profiles
-            if (!member.profiles) return null;
+            const profile = profileMap.get(member.user_id as string);
+            if (!profile) return null;
 
-            const hasSubmitted = usersWhoSubmitted.has(member.profiles.id);
-            const isCurrentUser = member.user_id === user.id;
+            const hasSubmitted = usersWhoSubmitted.has(profile.id);
+            const isCurrentUser = profile.id === user.id;
             return (
-              <div key={member.profiles.id} className="flex items-center justify-between border-2 border-black bg-white p-3 dark:border-white dark:bg-zinc-900">
+              <div key={profile.id} className="flex items-center justify-between border-2 border-black bg-white p-3 dark:border-white dark:bg-zinc-900">
                 <div className="flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center border-2 border-black bg-poster-orange font-display text-lg font-bold text-black dark:border-white">
-                    {member.profiles.display_name?.[0].toUpperCase()}
+                    {profile.displayName?.[0]?.toUpperCase()}
                   </div>
                   <div className="flex flex-col">
                     <span className="font-sans text-sm font-bold text-black dark:text-white">
-                      {member.profiles.display_name} {isCurrentUser ? "(You)" : ""}
+                      {profile.displayName} {isCurrentUser ? "(You)" : ""}
                     </span>
                     <span className="font-display text-[10px] font-bold uppercase tracking-wider text-slate-500">
                       {member.role === "organizer" ? "Organizer" : hasSubmitted ? "Submitted" : "Pending"}
@@ -285,4 +293,3 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
     </div>
   );
 }
-

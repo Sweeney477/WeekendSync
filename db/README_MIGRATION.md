@@ -2,9 +2,17 @@
 
 ## Profiles RLS (fix "Unknown" members in trip People list)
 
-If trip members show as "Unknown" in the People tab, the `profiles` table likely still has a policy that only lets users read their own profile. The members API needs to read all trip members' profiles to show names.
+If trip members show as "Unknown" in the People tab, the `profiles` table likely still has a policy that only lets users read their own profile. The members API now reads from a safe `public_profiles` view (id + display_name) and relies on a shared-trip policy to expose names.
 
-**Run once (Supabase Dashboard → SQL Editor):** paste and run the contents of `db/migration_profiles_rls.sql`. This allows authenticated users to read all profile rows (SELECT only; INSERT/UPDATE remain owner-only).
+**Run once (Supabase Dashboard → SQL Editor):** paste and run the contents of `db/migration_profiles_rls.sql`. This creates the `public_profiles` view and scoped SELECT policies (own profile + shared trip members).
+
+---
+
+# Invite Code Hardening
+
+Adds 12-character invite codes and validates input on join.
+
+**Run once (Supabase Dashboard → SQL Editor):** paste and run the contents of `db/migration_invite_code_hardening.sql`.
 
 ---
 

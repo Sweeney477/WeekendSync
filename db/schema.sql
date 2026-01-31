@@ -287,10 +287,10 @@ begin
     raise exception 'first_date_required';
   end if;
 
-  -- create unique invite code (8 chars hex)
+  -- create unique invite code (12 chars, uppercase alphanumeric)
   loop
     v_try := v_try + 1;
-    v_code := upper(substring(md5(gen_random_uuid()::text) from 1 for 8));
+    v_code := upper(substring(md5(gen_random_uuid()::text) from 1 for 12));
     exit when not exists (select 1 from public.trips t where t.invite_code = v_code);
     if v_try > 25 then
       raise exception 'failed_to_generate_invite_code';
@@ -362,14 +362,20 @@ as $$
 declare
   v_user uuid := auth.uid();
   v_trip_id uuid;
+  v_code text;
 begin
   if v_user is null then
     raise exception 'not_authenticated';
   end if;
 
+  v_code := upper(trim(p_invite_code));
+  if v_code !~ '^[A-Z0-9]{8,12}$' then
+    raise exception 'invalid_invite_code';
+  end if;
+
   select t.id into v_trip_id
   from public.trips t
-  where t.invite_code = p_invite_code;
+  where t.invite_code = v_code;
 
   if v_trip_id is null then
     raise exception 'invalid_invite_code';
@@ -461,7 +467,23 @@ drop policy if exists "profiles_select_own" on public.profiles;
 drop policy if exists "profiles_select_all" on public.profiles;
 drop policy if exists "profiles_select_members" on public.profiles;
 drop policy if exists "profiles_select_authenticated" on public.profiles;
-create policy "profiles_select_authenticated" on public.profiles for select to authenticated using (true);
+drop view if exists public.public_profiles;
+create view public.public_profiles as
+select id, display_name
+from public.profiles;
+grant select on public.public_profiles to authenticated;
+create policy "profiles_select_own" on public.profiles for select to authenticated using (id = auth.uid());
+create policy "profiles_select_shared_trip" on public.profiles
+  for select to authenticated
+  using (
+    exists (
+      select 1
+      from public.trip_members tm_self
+      join public.trip_members tm_other on tm_other.trip_id = tm_self.trip_id
+      where tm_self.user_id = auth.uid()
+        and tm_other.user_id = profiles.id
+    )
+  );
 
 drop policy if exists "profiles_insert_own" on public.profiles;
 create policy "profiles_insert_own" on public.profiles for insert with check (id = auth.uid());

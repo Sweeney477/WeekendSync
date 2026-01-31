@@ -71,7 +71,7 @@ export function SignInClient() {
         {error ? <p className="text-sm text-rose-700">{error}</p> : null}
       </Card>
 
-      <Link className="text-sm font-medium text-brand-700 underline" href="/">
+      <Link className="text-sm font-medium text-brand-800 underline" href="/">
         Back
       </Link>
     </main>

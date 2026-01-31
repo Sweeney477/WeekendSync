@@ -406,7 +406,7 @@ export function HomeClient() {
           </svg>
           <span className="text-[10px] font-bold uppercase tracking-tighter">Home</span>
         </button>
-        <button className="group flex flex-col items-center gap-1 opacity-40 hover:opacity-100" onClick={() => isAuthed && router.push("/profile")}>
+        <button className="group flex flex-col items-center gap-1 opacity-60 hover:opacity-100" onClick={() => isAuthed && router.push("/profile")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -424,7 +424,7 @@ export function HomeClient() {
           </svg>
           <span className="text-[10px] font-bold uppercase tracking-tighter">Trips</span>
         </button>
-        <button className="group flex flex-col items-center gap-1 opacity-40 hover:opacity-100">
+        <button className="group flex flex-col items-center gap-1 opacity-60 hover:opacity-100">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
@@ -442,7 +442,7 @@ export function HomeClient() {
           </svg>
           <span className="text-[10px] font-bold uppercase tracking-tighter">Inbox</span>
         </button>
-        <button className="group flex flex-col items-center gap-1 opacity-40 hover:opacity-100" onClick={() => isAuthed ? router.push("/profile") : router.push("/sign-in")}>
+        <button className="group flex flex-col items-center gap-1 opacity-60 hover:opacity-100" onClick={() => isAuthed ? router.push("/profile") : router.push("/sign-in")}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="24"
