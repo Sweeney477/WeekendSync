@@ -6,6 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
+import { getFriendlyCreateError, getFriendlyJoinError } from "@/lib/uxErrors";
 
 type MeResponse = {
   user: { id: string; email?: string | null } | null;
@@ -97,7 +98,8 @@ export function HomeClient() {
       // Automatically redirect to the trip plan page
       router.push(`/trip/${json.trip.id}/plan`);
     } catch (e) {
-      setActionError(e instanceof Error ? e.message : "Failed to create trip");
+      const msg = e instanceof Error ? e.message : "";
+      setActionError(getFriendlyCreateError(msg));
       setLoading(false);
     }
   }
@@ -135,7 +137,8 @@ export function HomeClient() {
 
       router.push(`/trip/${json.tripId}/plan`);
     } catch (e) {
-      setActionError(e instanceof Error ? e.message : "Failed to join trip");
+      const msg = e instanceof Error ? e.message : "";
+      setActionError(getFriendlyJoinError(msg));
       setLoading(false);
     }
   }
@@ -169,9 +172,10 @@ export function HomeClient() {
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(shareUrl);
-                    alert("Copied!");
+                    alert("Link copied");
                   }}
                   className="bg-poster-yellow px-2 py-1 font-display text-xs font-bold uppercase tracking-widest text-black hover:bg-black hover:text-white"
+                  aria-label="Copy invite link"
                 >
                   Copy
                 </button>
@@ -184,7 +188,7 @@ export function HomeClient() {
                     url: shareUrl,
                   }).catch(() => {
                     navigator.clipboard.writeText(shareUrl);
-                    alert("Link copied!");
+                    alert("Link copied");
                   });
                 }}
                 className="flex w-full items-center justify-center gap-2 bg-poster-blue py-4 font-display text-xl font-bold uppercase tracking-widest text-white transition-all hover:bg-black active:translate-y-1"
@@ -324,28 +328,31 @@ export function HomeClient() {
 
         <h2 className="mb-2 font-display text-3xl font-bold uppercase tracking-tight">Join a Trip</h2>
         <p className="mb-8 max-w-[80%] font-medium leading-snug opacity-80">
-          Enter the unique code shared by your friends to sync up.
+          Enter the code your friend shared to join their trip.
         </p>
         <div className="space-y-6">
           <div>
             <label className="mb-2 block font-display text-xs font-bold uppercase tracking-widest" htmlFor="trip-code">
-              Trip Code
+              Trip code
             </label>
             <input
               id="trip-code"
               type="text"
-              placeholder="E.G. WKND24"
+              placeholder="e.g. WKND24"
+              aria-describedby="trip-code-hint"
               className="w-full border-4 border-black bg-transparent p-4 font-display text-2xl font-bold uppercase tracking-widest placeholder:text-zinc-400 focus:border-primary focus:ring-0 dark:border-ink-dark/40 dark:text-ink-dark dark:placeholder:text-muted-dark dark:focus:border-poster-yellow"
               value={inviteCode}
               onChange={(e) => setInviteCode(e.target.value.toUpperCase())}
             />
+            <p id="trip-code-hint" className="mt-1.5 font-sans text-xs text-slate-600 dark:text-muted-dark">8–12 letters and numbers</p>
           </div>
           <button
             onClick={onJoinTrip}
             disabled={!inviteCode || loading}
             className="w-full border-4 border-black bg-brand-500 px-6 py-5 font-display text-xl font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white active:translate-y-1 disabled:opacity-50 dark:border-ink-dark/40 dark:hover:bg-surface-dark-2"
+            aria-busy={loading}
           >
-            {loading ? "Loading..." : "Join Trip"}
+            {loading ? "Joining…" : "Join trip"}
           </button>
         </div>
       </div>
@@ -367,7 +374,7 @@ export function HomeClient() {
               router.push("/trips/new");
             }
           }}
-          className="flex w-full items-center justify-center gap-3 border-4 border-black p-4 font-display font-bold uppercase tracking-widest hover:bg-poster-yellow hover:text-black transition-colors dark:border-ink-dark/40"
+          className="flex w-full items-center justify-center gap-3 border-4 border-black p-4 font-display font-bold uppercase tracking-widest hover:bg-poster-yellow hover:text-black transition-colors dark:border-ink-dark/40 dark:text-ink-dark"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -470,7 +477,7 @@ export function HomeClient() {
       </div>
 
       {actionError ? (
-        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 border-2 border-black bg-rose-50 px-6 py-2 font-display text-sm font-bold uppercase tracking-wider text-rose-600 shadow-[4px_4px_0px_0px_#000]">
+        <div className="fixed bottom-24 left-1/2 -translate-x-1/2 border-2 border-black bg-rose-50 px-6 py-2 font-display text-sm font-bold uppercase tracking-wider text-rose-600 shadow-[4px_4px_0px_0px_#000] dark:border-ink-dark/40 dark:bg-rose-900/20 dark:text-rose-400 dark:shadow-[4px_4px_0px_0px_rgba(232,228,223,0.15)]" role="alert">
           {actionError}
         </div>
       ) : null}

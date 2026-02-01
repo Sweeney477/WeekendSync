@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { getFriendlyJoinError } from "@/lib/uxErrors";
 
 export function JoinClient({ inviteCode }: { inviteCode: string }) {
   const [loading, setLoading] = useState(true);
@@ -35,7 +36,8 @@ export function JoinClient({ inviteCode }: { inviteCode: string }) {
 
         const joinJson = await joinRes.json();
         if (!joinRes.ok) {
-          setError(joinJson?.error ?? "Failed to join trip");
+          const msg = joinJson?.error ?? "";
+          setError(getFriendlyJoinError(msg));
           setLoading(false);
           return;
         }
@@ -44,11 +46,11 @@ export function JoinClient({ inviteCode }: { inviteCode: string }) {
         if (joinJson.tripId) {
           window.location.href = `/trip/${joinJson.tripId}/plan`;
         } else {
-          setError("Invalid response from server");
+          setError("Something went wrong. Try again or go to Home.");
           setLoading(false);
         }
       } catch (e) {
-        setError(e instanceof Error ? e.message : "An error occurred");
+        setError(e instanceof Error ? e.message : "Something went wrong. Try again or go to Home.");
         setLoading(false);
       }
     })();
@@ -57,22 +59,22 @@ export function JoinClient({ inviteCode }: { inviteCode: string }) {
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-4 px-4 py-8 pb-24">
       <h1 className="text-2xl font-semibold">Join trip</h1>
-      <p className="text-sm text-slate-600">
-        Invite code: <span className="font-mono font-medium">{inviteCode}</span>
+      <p className="text-sm text-slate-600 dark:text-muted-dark">
+        Code: <span className="font-mono font-medium">{inviteCode}</span>
       </p>
 
       {loading ? (
-        <div className="flex items-center justify-center py-8">
-          <p className="text-sm text-slate-600">Joining trip...</p>
+        <div className="flex items-center justify-center py-8" aria-live="polite">
+          <p className="text-sm text-slate-600 dark:text-muted-dark">Joining trip…</p>
         </div>
       ) : error ? (
         <div className="flex flex-col gap-4">
-          <div className="rounded-xl bg-rose-50 p-4 text-sm text-rose-700">
+          <div className="rounded-xl bg-rose-50 p-4 text-sm text-rose-700 dark:bg-rose-900/20 dark:text-rose-400" role="alert">
             {error}
           </div>
           <Link
             href="/"
-            className="inline-flex h-11 items-center justify-center rounded-xl bg-brand-600 px-4 text-sm font-medium text-white hover:bg-brand-700"
+            className="inline-flex h-11 items-center justify-center rounded-xl bg-brand-600 px-4 text-sm font-medium text-white hover:bg-brand-700 dark:hover:bg-brand-500"
           >
             Go to Home
           </Link>
@@ -80,7 +82,7 @@ export function JoinClient({ inviteCode }: { inviteCode: string }) {
       ) : (
         <a
           href={`/sign-in?inviteCode=${encodeURIComponent(inviteCode)}`}
-          className="inline-flex h-11 items-center justify-center rounded-xl bg-brand-600 px-4 text-sm font-medium text-white hover:bg-brand-700"
+          className="inline-flex h-11 items-center justify-center rounded-xl bg-brand-600 px-4 text-sm font-medium text-white hover:bg-brand-700 dark:hover:bg-brand-500"
         >
           Sign in to join
         </a>

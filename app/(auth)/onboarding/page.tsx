@@ -70,14 +70,14 @@ export default function OnboardingPage() {
   }
 
   if (isCheckingSession) {
-    return <div className="mx-auto min-h-dvh w-full max-w-md px-4 py-8 text-sm text-slate-600">Loading…</div>;
+    return <div className="mx-auto min-h-dvh w-full max-w-md px-4 py-8 text-sm text-slate-600 dark:text-muted-dark">Loading…</div>;
   }
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-6 px-4 py-8 pb-24">
       <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold">Quick setup</h1>
-        <p className="text-sm text-slate-600">Enter your name so your group recognizes you. Home city is optional.</p>
+        <p className="text-sm text-slate-600 dark:text-muted-dark">Add your name so your group recognizes you. Home city is optional.</p>
       </header>
 
       <Card className="flex flex-col gap-3">
@@ -86,7 +86,7 @@ export default function OnboardingPage() {
         <Button onClick={onSave} isLoading={isSaving} disabled={!displayName}>
           Continue
         </Button>
-        {error ? <p className="text-sm text-rose-700">{error}</p> : null}
+        {error ? <p className="text-sm text-rose-700 dark:text-rose-400" role="alert">{error}</p> : null}
       </Card>
     </main>
   );

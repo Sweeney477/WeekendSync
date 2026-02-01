@@ -253,8 +253,8 @@ export function PlanClient({ tripId, userRole }: { tripId: string; userRole: str
   if (loading) {
     return (
       <div className="flex flex-col gap-6 px-4 pb-24">
-        <div className="h-32 w-full animate-pulse rounded-2xl bg-slate-200" />
-        <div className="h-64 w-full animate-pulse rounded-2xl bg-slate-200" />
+        <div className="h-32 w-full animate-pulse rounded-2xl bg-slate-200 dark:bg-surface-dark-2" />
+        <div className="h-64 w-full animate-pulse rounded-2xl bg-slate-200 dark:bg-surface-dark-2" />
       </div>
     );
   }

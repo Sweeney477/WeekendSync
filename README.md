@@ -84,3 +84,18 @@ Then:
 - **Privacy Controls**: Code-only or invite-only trip access
 - **Cost Splitting**: Automatic per-person balance calculations
 
+## Agent Skills (Contributors)
+
+WeekendSync uses Cursor Agent Skills for consistent AI assistance. Project wrappers live in `.cursor/skills/` and are version-controlled. For best results, also install the full skills globally into `~/.codex/skills/` (or `~/.cursor/skills/`):
+
+- nextjs
+- supabase-postgres-best-practices
+- user-journeys
+- user-onboarding
+- accessibility-compliance-accessibility-audit
+- ux-writing
+- playwright-cli
+- vitest
+
+Use the skill-installer or copy from [openai/skills](https://github.com/openai/skills) / other skill repos. See `AGENTS.md` for when each skill applies.
+

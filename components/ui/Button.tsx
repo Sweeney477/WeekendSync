@@ -21,8 +21,8 @@ export function Button({
   return (
     <button
       className={clsx(
-        "inline-flex items-center justify-center gap-2 border-2 px-6 py-3 font-display font-bold uppercase tracking-widest transition-all active:translate-y-0.5 disabled:opacity-50 disabled:active:translate-y-0",
-        "focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 dark:focus-visible:ring-ink-dark",
+        "inline-flex items-center justify-center gap-2 border-2 px-6 py-3 font-display font-bold uppercase tracking-widest transition-colors transition-transform active:translate-y-0.5 disabled:opacity-50 disabled:active:translate-y-0",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-black focus-visible:ring-offset-2 dark:focus-visible:ring-ink-dark dark:focus-visible:ring-offset-background-dark",
         size === "md" && "h-12 text-sm",
         size === "lg" && "h-14 text-base",
         variant === "primary" && "border-black bg-primary text-white hover:bg-black dark:border-ink-dark/40 dark:text-ink-dark dark:hover:bg-surface-dark-2",
@@ -34,9 +34,12 @@ export function Button({
         className,
       )}
       disabled={disabled || isLoading}
+      aria-busy={isLoading}
       {...props}
     >
-      {isLoading ? <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/50 border-t-white" /> : null}
+      {isLoading ? (
+        <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/50 border-t-white" aria-hidden />
+      ) : null}
       {children}
     </button>
   );

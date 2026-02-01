@@ -105,7 +105,7 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
           <p className="font-sans text-sm font-bold text-black dark:text-white">
             Availability submitted by {submittedCount}/{totalMembers} friends
           </p>
-          <div className="h-4 w-full border-2 border-black bg-white p-0.5 dark:border-white dark:bg-zinc-900">
+          <div className="h-4 w-full border-2 border-black bg-white p-0.5 dark:border-ink-dark/40 dark:bg-surface-dark-2">
             <div
               className="h-full bg-poster-green transition-all duration-500"
               style={{ width: `${progress}%` }}
@@ -113,8 +113,8 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
           </div>
         </div>
 
-        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-          <div className="flex h-5 w-5 items-center justify-center border-2 border-black bg-poster-blue text-white dark:border-white">
+        <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-slate-500 dark:text-muted-dark">
+          <div className="flex h-5 w-5 items-center justify-center border-2 border-black bg-poster-blue text-white dark:border-ink-dark/40">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="12"
@@ -137,7 +137,7 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
         </div>
       </Card>
 
-      <div className="relative flex flex-col justify-end border-4 border-black bg-poster-blue p-6 shadow-[8px_8px_0px_0px_#000] dark:border-white dark:shadow-[8px_8px_0px_0px_#fff]">
+      <div className="relative flex flex-col justify-end border-4 border-black bg-poster-blue p-6 shadow-[8px_8px_0px_0px_#000] dark:border-ink-dark/40 dark:shadow-[8px_8px_0px_0px_rgba(232,228,223,0.15)]">
         <div className="flex flex-col gap-2">
           <h2 className="font-display text-2xl font-bold uppercase tracking-tighter text-white">Next Step:<br />{nextStepTitle}</h2>
           <p className="font-sans text-sm font-medium text-white/90">{nextStepDesc}</p>
@@ -145,6 +145,7 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
         <Link
           href={nextStepHref}
           className="mt-6 flex h-14 w-full items-center justify-center gap-2 border-2 border-black bg-poster-yellow font-display text-lg font-bold uppercase tracking-widest text-black transition-all hover:bg-white hover:text-black active:translate-y-1"
+          aria-label={`Continue to ${nextStepTitle}`}
         >
           Continue
           <svg
@@ -168,7 +169,7 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
         <div className="grid grid-cols-2 gap-4">
           {topWeekendDisplay && (
             <Card className="flex flex-col gap-3 p-4">
-              <div className="flex h-10 w-10 items-center justify-center border-2 border-black bg-poster-yellow text-black dark:border-white">
+              <div className="flex h-10 w-10 items-center justify-center border-2 border-black bg-poster-yellow text-black dark:border-ink-dark/40">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -188,14 +189,14 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
               </div>
               <div className="flex flex-col">
                 <span className="font-sans text-sm font-bold text-black dark:text-white">{topWeekendDisplay}</span>
-                <span className="font-display text-[10px] font-bold uppercase tracking-widest text-slate-500">Top Weekend</span>
+                <span className="font-display text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-muted-dark">Top Weekend</span>
               </div>
             </Card>
           )}
 
           {topDestinationData && (
             <Card className="flex flex-col gap-3 p-4">
-              <div className="flex h-10 w-10 items-center justify-center border-2 border-black bg-poster-blue text-white dark:border-white">
+              <div className="flex h-10 w-10 items-center justify-center border-2 border-black bg-poster-blue text-white dark:border-ink-dark/40">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="20"
@@ -215,7 +216,7 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
                 <span className="font-sans text-sm font-bold text-black dark:text-white">
                   {topDestinationData.city_name}
                 </span>
-                <span className="font-display text-[10px] font-bold uppercase tracking-widest text-slate-500">Top City</span>
+                <span className="font-display text-[10px] font-bold uppercase tracking-widest text-slate-500 dark:text-muted-dark">Top City</span>
               </div>
             </Card>
           )}
@@ -235,22 +236,22 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
             const hasSubmitted = usersWhoSubmitted.has(profile.id);
             const isCurrentUser = profile.id === user.id;
             return (
-              <div key={profile.id} className="flex items-center justify-between border-2 border-black bg-white p-3 dark:border-white dark:bg-zinc-900">
+              <div key={profile.id} className="flex items-center justify-between border-2 border-black bg-white p-3 dark:border-ink-dark/40 dark:bg-surface-dark-2">
                 <div className="flex items-center gap-3">
-                  <div className="flex h-10 w-10 items-center justify-center border-2 border-black bg-poster-orange font-display text-lg font-bold text-black dark:border-white">
+                  <div className="flex h-10 w-10 items-center justify-center border-2 border-black bg-poster-orange font-display text-lg font-bold text-black dark:border-ink-dark/40">
                     {profile.displayName?.[0]?.toUpperCase()}
                   </div>
                   <div className="flex flex-col">
                     <span className="font-sans text-sm font-bold text-black dark:text-white">
                       {profile.displayName} {isCurrentUser ? "(You)" : ""}
                     </span>
-                    <span className="font-display text-[10px] font-bold uppercase tracking-wider text-slate-500">
+                    <span className="font-display text-[10px] font-bold uppercase tracking-wider text-slate-500 dark:text-muted-dark">
                       {member.role === "organizer" ? "Organizer" : hasSubmitted ? "Submitted" : "Pending"}
                     </span>
                   </div>
                 </div>
                 {hasSubmitted ? (
-                  <div className="flex h-8 w-8 items-center justify-center border-2 border-black bg-poster-green text-black dark:border-white">
+                  <div className="flex h-8 w-8 items-center justify-center border-2 border-black bg-poster-green text-black dark:border-ink-dark/40">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"
@@ -266,7 +267,7 @@ export default async function TripDashboardPage({ params }: { params: Promise<{ 
                     </svg>
                   </div>
                 ) : (
-                  <div className="flex h-8 w-8 items-center justify-center border-2 border-black bg-slate-100 text-slate-300 dark:border-white dark:bg-zinc-800">
+                  <div className="flex h-8 w-8 items-center justify-center border-2 border-black bg-slate-100 text-slate-300 dark:border-ink-dark/40 dark:bg-zinc-800">
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="16"

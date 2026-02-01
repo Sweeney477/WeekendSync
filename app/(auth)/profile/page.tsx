@@ -58,7 +58,7 @@ export default function ProfilePage() {
   }
 
   if (isCheckingSession) {
-    return <div className="mx-auto min-h-dvh w-full max-w-md px-4 py-8 text-sm text-slate-600">Loading…</div>;
+    return <div className="mx-auto min-h-dvh w-full max-w-md px-4 py-8 text-sm text-slate-600 dark:text-muted-dark">Loading…</div>;
   }
 
   return (
@@ -103,11 +103,11 @@ export default function ProfilePage() {
           disabled={!displayName || isSaving}
           className="mt-2 w-full border-2 border-black bg-brand-500 p-4 font-display text-lg font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white hover:shadow-[4px_4px_0px_0px_#000] active:translate-x-[2px] active:translate-y-[2px] active:shadow-none disabled:opacity-50 dark:border-ink-dark/40 dark:hover:shadow-[4px_4px_0px_0px_rgba(232,228,223,0.15)]"
         >
-          {isSaving ? "Saving..." : "Save changes"}
+          {isSaving ? "Saving…" : "Save changes"}
         </button>
 
-        {error ? <p className="font-display text-sm font-bold uppercase tracking-wider text-rose-600">{error}</p> : null}
-        {success ? <p className="font-display text-sm font-bold uppercase tracking-wider text-emerald-600">{success}</p> : null}
+        {error ? <p className="font-display text-sm font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">{error}</p> : null}
+        {success ? <p className="font-display text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">{success}</p> : null}
       </div>
     </main>
   );

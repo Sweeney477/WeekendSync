@@ -12,7 +12,9 @@
     "test:watch": "vitest --watch",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:a11y": "playwright test tests/e2e/a11y.spec.ts"
+    "test:a11y": "playwright test tests/e2e/a11y.spec.ts",
+    "test:journeys": "playwright test tests/e2e/journeys/",
+    "test:journeys:critical": "playwright test tests/e2e/journeys/ --grep @critical"
   },
   "keywords": [],
   "author": "",

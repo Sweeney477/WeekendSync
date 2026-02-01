@@ -12,7 +12,7 @@ export function InviteButton({ inviteCode }: { inviteCode: string }) {
         });
       } else {
         await navigator.clipboard.writeText(inviteLink);
-        alert("Invite link copied to clipboard!");
+        alert("Link copied");
       }
     } catch (err) {
       // User cancelled share or error occurred
@@ -20,9 +20,9 @@ export function InviteButton({ inviteCode }: { inviteCode: string }) {
         // Fallback to clipboard if share fails (not user cancellation)
         try {
           await navigator.clipboard.writeText(inviteLink);
-          alert("Invite link copied to clipboard!");
+          alert("Link copied");
         } catch {
-          alert("Failed to share invite link");
+          alert("Couldn’t copy link. Try again.");
         }
       }
     }
@@ -31,7 +31,8 @@ export function InviteButton({ inviteCode }: { inviteCode: string }) {
   return (
     <button
       onClick={handleInvite}
-      className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 font-bold text-white shadow-lg active:scale-[0.98]"
+      className="flex h-14 w-full items-center justify-center gap-2 rounded-2xl bg-slate-900 font-bold text-white shadow-lg active:scale-[0.98] dark:bg-surface-dark dark:hover:bg-surface-dark-2"
+      aria-label="Share invite link or copy link"
     >
       <svg
         xmlns="http://www.w3.org/2000/svg"

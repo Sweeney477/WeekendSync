@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import Link from "next/link";
+import { getFriendlyCreateError } from "@/lib/uxErrors";
 
 export function CreateTripClient() {
   const [name, setName] = useState("");
@@ -69,7 +70,8 @@ export function CreateTripClient() {
       // Use window.location for a hard redirect to ensure the trip page loads fresh
       window.location.href = tripUrl;
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      const msg = err instanceof Error ? err.message : "";
+      setError(getFriendlyCreateError(msg));
       setIsLoading(false);
     }
   }
@@ -118,7 +120,7 @@ export function CreateTripClient() {
                 required
                 className="h-14 w-full border-2 border-black bg-transparent px-4 font-sans text-lg font-bold focus:border-primary focus:ring-0 dark:border-ink-dark/40 dark:text-ink-dark dark:focus:border-poster-yellow"
               />
-              <p className="text-xs text-slate-500">The earliest date we should consider.</p>
+              <p className="text-xs text-slate-500 dark:text-muted-dark">The earliest date we should consider.</p>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -139,7 +141,7 @@ export function CreateTripClient() {
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
                 </div>
               </div>
-              <p className="text-xs text-slate-500">This controls how many consecutive days each option spans.</p>
+              <p className="text-xs text-slate-500 dark:text-muted-dark">This controls how many consecutive days each option spans.</p>
             </div>
 
             {timeframeMode === "custom" ? (
@@ -168,7 +170,7 @@ export function CreateTripClient() {
                 required
                 className="h-14 w-full border-2 border-black bg-transparent px-4 font-sans text-lg font-bold focus:border-primary focus:ring-0 dark:border-ink-dark/40 dark:text-ink-dark dark:focus:border-poster-yellow"
               />
-              <p className="text-xs text-slate-500">How many weekly options should we generate?</p>
+              <p className="text-xs text-slate-500 dark:text-muted-dark">How many weekly options should we generate?</p>
             </div>
           </div>
 
@@ -185,7 +187,7 @@ export function CreateTripClient() {
             }
           >
             {isLoading ? (
-              "Creating..."
+              "Creating…"
             ) : (
               <>
                 Create Trip
@@ -195,7 +197,7 @@ export function CreateTripClient() {
           </button>
 
           {error && (
-            <div className="border-2 border-black bg-rose-50 p-3 font-medium text-rose-600 dark:border-ink-dark/40 dark:bg-rose-900/20 dark:text-rose-400">
+            <div className="border-2 border-black bg-rose-50 p-3 font-medium text-rose-600 dark:border-ink-dark/40 dark:bg-rose-900/20 dark:text-rose-400" role="alert">
               {error}
             </div>
           )}

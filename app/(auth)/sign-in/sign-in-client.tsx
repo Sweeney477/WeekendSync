@@ -52,7 +52,7 @@ export function SignInClient() {
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col gap-6 px-4 py-8 pb-24">
       <header className="flex flex-col gap-2">
         <h1 className="text-2xl font-semibold">Sign in</h1>
-        <p className="text-sm text-slate-600">We’ll email you a one-time code link. No password.</p>
+        <p className="text-sm text-slate-600 dark:text-muted-dark">We’ll email you a one-time sign-in link. No password needed.</p>
       </header>
 
       <Card className="flex flex-col gap-3">
@@ -67,11 +67,11 @@ export function SignInClient() {
         <Button onClick={onSendCode} isLoading={status === "sending"} disabled={!normalizedEmail}>
           Send sign-in link
         </Button>
-        {status === "sent" ? <p className="text-sm text-slate-700">Check your email for the sign-in link.</p> : null}
-        {error ? <p className="text-sm text-rose-700">{error}</p> : null}
+        {status === "sent" ? <p className="text-sm text-slate-700 dark:text-ink-dark">Check your email for the sign-in link.</p> : null}
+        {error ? <p className="text-sm text-rose-700 dark:text-rose-400" role="alert">{error}</p> : null}
       </Card>
 
-      <Link className="text-sm font-medium text-brand-800 underline" href="/">
+      <Link className="text-sm font-medium text-brand-800 dark:text-brand-400 underline" href="/">
         Back
       </Link>
     </main>

@@ -30,6 +30,14 @@
   --color-shadow-dark: rgba(0, 0, 0, 0.6);
 }
 
+html {
+  color-scheme: light;
+}
+
+html.dark {
+  color-scheme: dark;
+}
+
 html,
 body {
   background-color: var(--color-background-light);
@@ -43,6 +51,17 @@ html.dark body {
 
 body {
   font-feature-settings: "rlig" 1, "calt" 1;
+}
+
+/* Respect user motion preferences (accessibility) */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 
