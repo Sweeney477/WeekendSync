@@ -37,6 +37,7 @@ export async function GET(req: Request) {
     inviteLink: `${origin}/join/${m.trips.invite_code}`,
     status: m.trips.status as string,
     role: m.role as string,
+    selectedWeekendStart: m.trips.selected_weekend_start ?? null,
   }));
 
   return NextResponse.json({ trips }, { status: 200 });

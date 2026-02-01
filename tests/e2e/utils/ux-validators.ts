@@ -35,3 +35,17 @@ export async function validateCTAVisible(
     await expect(cta).toBeInViewport();
   }
 }
+
+/**
+ * Assert a next-step CTA (button or link) is visible.
+ * Use where doc calls for "next step" or "Mark your availability" visible.
+ */
+export async function validateNextStepVisible(
+  page: Page,
+  ctaText: RegExp | string
+): Promise<void> {
+  const cta = page.getByRole("button", { name: ctaText }).or(
+    page.getByRole("link", { name: ctaText })
+  );
+  await expect(cta).toBeVisible();
+}

@@ -8,7 +8,7 @@ export function getFriendlyJoinError(message: string): string {
     message === "invalid_invite_code" ||
     message === "Invalid invite code"
   ) {
-    return "That code isn’t valid. Check the link or ask your friend for a new one.";
+    return "That invite code isn’t valid. Check the link or ask your friend for a new one.";
   }
   if (message.includes("Too many attempts")) {
     return "Too many attempts. Wait a minute and try again.";

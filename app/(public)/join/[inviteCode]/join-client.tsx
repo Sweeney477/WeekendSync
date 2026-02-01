@@ -42,9 +42,9 @@ export function JoinClient({ inviteCode }: { inviteCode: string }) {
           return;
         }
 
-        // Success - redirect to trip plan page
+        // Success - redirect to trip dashboard
         if (joinJson.tripId) {
-          window.location.href = `/trip/${joinJson.tripId}/plan`;
+          window.location.href = `/trip/${joinJson.tripId}/dashboard`;
         } else {
           setError("Something went wrong. Try again or go to Home.");
           setLoading(false);

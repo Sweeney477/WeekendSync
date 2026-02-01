@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
+import { AppFooterNavWrapper } from "@/components/AppFooterNavWrapper";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
@@ -31,8 +32,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           }}
         />
       </head>
-      <body className={`${inter.variable} ${spaceGrotesk.variable} min-h-dvh bg-background-light bg-noise font-sans text-black antialiased transition-colors duration-300 dark:bg-background-dark dark:text-ink-dark`}>
-        {children}
+      <body className={`${inter.variable} ${spaceGrotesk.variable} flex min-h-dvh flex-col bg-background-light bg-noise font-sans text-black antialiased transition-colors duration-300 dark:bg-background-dark dark:text-ink-dark`}>
+        <div className="flex flex-1 flex-col">{children}</div>
+        <AppFooterNavWrapper />
         <Analytics />
       </body>
     </html>

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Link from "next/link";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
@@ -414,6 +415,36 @@ function OverviewTab({
           </div>
         )}
       </Card>
+
+      {/* Next Step: Mark Availability */}
+      {trip?.id && (
+        <Link
+          href={`/trip/${trip.id}/availability`}
+          className="relative flex flex-col justify-end border-4 border-black bg-poster-blue p-6 shadow-[8px_8px_0px_0px_#000] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none dark:border-ink-dark/40 dark:shadow-[8px_8px_0px_0px_rgba(232,228,223,0.15)]"
+        >
+          <div className="flex flex-col gap-2">
+            <h2 className="font-display text-2xl font-bold uppercase tracking-tighter text-white">Next Step: Mark Your Availability</h2>
+            <p className="font-sans text-sm font-medium text-white/90">Let the group know when you can make it.</p>
+          </div>
+          <span className="mt-6 flex h-14 w-full items-center justify-center gap-2 border-2 border-black bg-poster-yellow font-display text-lg font-bold uppercase tracking-widest text-black transition-all hover:bg-white hover:text-black dark:border-white">
+            Continue
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <line x1="5" x2="19" y1="12" y2="12" />
+              <polyline points="12 5 19 12 12 19" />
+            </svg>
+          </span>
+        </Link>
+      )}
 
       {/* Privacy & Safety */}
       {isOrganizer && (

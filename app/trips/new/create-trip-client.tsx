@@ -59,7 +59,13 @@ export function CreateTripClient() {
 
       const json = await res.json();
 
-      if (!res.ok) throw new Error(json.error || "Failed to create trip");
+      if (!res.ok) {
+        if (res.status === 409) {
+          window.location.href = "/onboarding?next=/trips/new";
+          return;
+        }
+        throw new Error(json.error || "Failed to create trip");
+      }
 
       if (!json.trip?.id) {
         throw new Error("No trip ID returned from server");

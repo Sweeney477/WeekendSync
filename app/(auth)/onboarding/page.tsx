@@ -57,7 +57,7 @@ export default function OnboardingPage() {
         });
         const joinJson = await joinRes.json().catch(() => null);
         if (joinRes.ok && joinJson?.tripId) {
-          window.location.href = `/trip/${joinJson.tripId}/plan`;
+          window.location.href = `/trip/${joinJson.tripId}/dashboard`;
           return;
         }
       }
@@ -81,7 +81,7 @@ export default function OnboardingPage() {
       </header>
 
       <Card className="flex flex-col gap-3">
-        <Input label="Your name" placeholder="e.g. Sam" value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
+        <Input label="Your name" placeholder="e.g. Sam" hint="How your group will see you." value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
         <Input label="Home city (optional)" placeholder="e.g. Chicago" value={homeCity} onChange={(e) => setHomeCity(e.target.value)} />
         <Button onClick={onSave} isLoading={isSaving} disabled={!displayName}>
           Continue

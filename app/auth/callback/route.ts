@@ -56,8 +56,15 @@ export async function GET(req: Request) {
     return signInRes;
   }
 
-  // When returning from sign-in with an invite, always send to onboarding first so they set a display name before joining.
+  const { data: profile } = await supabase.from("profiles").select("display_name").eq("id", me.user.id).maybeSingle();
+
+  // When returning from sign-in with an invite: skip onboarding if profile has display_name, else send to onboarding.
   if (inviteCode) {
+    if (profile?.display_name && profile.display_name.trim().length > 1) {
+      const res = NextResponse.redirect(new URL(`/join/${inviteCode}`, url.origin));
+      clearPendingJoinCookie(res);
+      return res;
+    }
     const dest = new URL("/onboarding", url.origin);
     dest.searchParams.set("inviteCode", inviteCode);
     if (next) dest.searchParams.set("next", next);
@@ -67,7 +74,6 @@ export async function GET(req: Request) {
   }
 
   // No invite: if profile missing display_name, push to onboarding.
-  const { data: profile } = await supabase.from("profiles").select("display_name").eq("id", me.user.id).maybeSingle();
   if (!profile?.display_name) {
     const dest = new URL("/onboarding", url.origin);
     if (next) dest.searchParams.set("next", next);

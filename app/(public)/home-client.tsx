@@ -14,7 +14,7 @@ type MeResponse = {
 };
 
 type MyTripsResponse = {
-  trips: Array<{ id: string; name: string; inviteCode: string; inviteLink: string; status: string; role: string }>;
+  trips: Array<{ id: string; name: string; inviteCode: string; inviteLink: string; status: string; role: string; selectedWeekendStart: string | null }>;
 };
 
 export function HomeClient() {
@@ -393,81 +393,6 @@ export function HomeClient() {
           Create New Trip
         </button>
       </div>
-
-      <nav className="mt-auto flex justify-between border-t-4 border-black px-2 pt-6 pb-2 dark:border-ink-dark/40">
-        <button className="group flex flex-col items-center gap-1" onClick={() => router.push("/")}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-primary transition-transform group-hover:scale-110"
-          >
-            <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" />
-            <polyline points="9 22 9 12 15 12 15 22" />
-          </svg>
-          <span className="text-[10px] font-bold uppercase tracking-tighter">Home</span>
-        </button>
-        <button className="group flex flex-col items-center gap-1 opacity-60 hover:opacity-100" onClick={() => isAuthed && router.push("/profile")}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="transition-transform group-hover:scale-110"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76" />
-          </svg>
-          <span className="text-[10px] font-bold uppercase tracking-tighter">Trips</span>
-        </button>
-        <button className="group flex flex-col items-center gap-1 opacity-60 hover:opacity-100">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="transition-transform group-hover:scale-110"
-          >
-            <path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9" />
-            <path d="M10.3 21a1.94 1.94 0 0 0 3.4 0" />
-          </svg>
-          <span className="text-[10px] font-bold uppercase tracking-tighter">Inbox</span>
-        </button>
-        <button className="group flex flex-col items-center gap-1 opacity-60 hover:opacity-100" onClick={() => isAuthed ? router.push("/profile") : router.push("/sign-in")}>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="transition-transform group-hover:scale-110"
-          >
-            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2" />
-            <circle cx="12" cy="7" r="4" />
-          </svg>
-          <span className="text-[10px] font-bold uppercase tracking-tighter">{isAuthed ? "Profile" : "Log In"}</span>
-        </button>
-      </nav>
 
       <div className="fixed top-0 left-0 h-full w-2 flex flex-col">
         <div className="flex-1 bg-poster-orange"></div>

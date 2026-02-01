@@ -24,10 +24,15 @@ test.describe("@critical Journey: Signup to First Value", () => {
     await expect(page.getByText(/8–12 letters and numbers/i)).toBeVisible();
   });
 
-  test("Step 2: Sign-in page has minimal form and Send sign-in link", async ({ page }) => {
+  test("Step 2: Sign-in page has Google option, email form and Send sign-in link", async ({
+    page,
+  }) => {
     await page.goto("/sign-in");
 
     await expect(page.getByRole("heading", { name: /sign in/i })).toBeVisible();
+    await expect(
+      page.getByRole("button", { name: /sign in with google/i })
+    ).toBeVisible();
     await expect(page.getByLabel(/email/i)).toBeVisible();
     await expect(
       page.getByRole("button", { name: /send sign-in link/i })

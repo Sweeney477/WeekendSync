@@ -8,5 +8,8 @@ test("landing page loads", async ({ page }) => {
 
 test("sign-in page loads", async ({ page }) => {
   await page.goto("/sign-in");
+  await expect(
+    page.getByRole("button", { name: /sign in with google/i })
+  ).toBeVisible();
   await expect(page.getByText("Send sign-in link", { exact: false })).toBeVisible();
 });
