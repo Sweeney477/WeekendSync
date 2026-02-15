@@ -1,187 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { StickyFooter } from "@/components/ui/StickyFooter";
-import { format, parseISO } from "date-fns";
+import { Tooltip } from "@/components/ui/Tooltip";
+import { AvailabilityRow, type WeekendWithCounts } from "@/components/trip/AvailabilitySection";
 
-type Weekend = {
-  trip_id: string;
-  weekend_start: string;
-  weekend_end: string;
-  score: number;
-  counts: { yes: number; maybe: number; no: number; unset: number; total: number };
-};
-
-function AvailabilityCounts({ counts }: { counts: { yes: number; maybe: number; no: number; unset: number; total: number } }) {
-  return (
-    <div className="flex items-center gap-2">
-      {counts.yes > 0 && (
-        <div className="flex items-center gap-1 border-2 border-black bg-poster-green px-2 py-0.5 dark:border-ink-dark/40">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-black dark:text-ink-dark"
-          >
-            <polyline points="20 6 9 17 4 12" />
-          </svg>
-          <span className="font-display text-[10px] font-bold text-black dark:text-ink-dark">{counts.yes}</span>
-        </div>
-      )}
-      {counts.maybe > 0 && (
-        <div className="flex items-center gap-1 border-2 border-black bg-poster-yellow px-2 py-0.5 dark:border-ink-dark/40">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-black dark:text-ink-dark"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-            <line x1="12" x2="12" y1="17" y2="17" />
-          </svg>
-          <span className="font-display text-[10px] font-bold text-black dark:text-ink-dark">{counts.maybe}</span>
-        </div>
-      )}
-      {counts.no > 0 && (
-        <div className="flex items-center gap-1 border-2 border-black bg-poster-orange px-2 py-0.5 dark:border-ink-dark/40">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="12"
-            height="12"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="3"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            className="text-black dark:text-ink-dark"
-          >
-            <circle cx="12" cy="12" r="10" />
-            <line x1="15" x2="9" y1="9" y2="15" />
-            <line x1="9" x2="15" y1="9" y2="15" />
-          </svg>
-          <span className="font-display text-[10px] font-bold text-black dark:text-ink-dark">{counts.no}</span>
-        </div>
-      )}
-      {counts.yes === 0 && counts.maybe === 0 && counts.no === 0 && (
-        <span className="font-display text-[10px] font-bold uppercase tracking-widest text-slate-400">No votes yet</span>
-      )}
-    </div>
-  );
-}
-
-function SegmentedAvailabilityControl({
-  currentStatus,
-  onSelect,
-  disabled,
-}: {
-  currentStatus: "yes" | "maybe" | "no" | "unset";
-  onSelect: (status: "yes" | "maybe" | "no" | "unset") => void;
-  disabled?: boolean;
-}) {
-  const options: Array<{ value: "yes" | "maybe" | "no" | "unset"; label: string; icon: ReactNode; bg: string; text: string }> = [
-    {
-      value: "yes",
-      label: "Yes",
-      bg: "bg-poster-green border-black",
-      text: "text-black",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <polyline points="20 6 9 17 4 12" />
-        </svg>
-      ),
-    },
-    {
-      value: "maybe",
-      label: "Maybe",
-      bg: "bg-poster-yellow border-black",
-      text: "text-black",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
-          <line x1="12" x2="12" y1="17" y2="17" />
-        </svg>
-      ),
-    },
-    {
-      value: "no",
-      label: "No",
-      bg: "bg-poster-orange border-black",
-      text: "text-black",
-      icon: (
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="14"
-          height="14"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="3"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="12" cy="12" r="10" />
-          <line x1="15" x2="9" y1="9" y2="15" />
-          <line x1="9" x2="15" y1="9" y2="15" />
-        </svg>
-      ),
-    },
-  ];
-
-  return (
-    <div className="flex items-center gap-0 border-2 border-black bg-white p-0.5 dark:border-ink-dark/40 dark:bg-surface-dark-2">
-      {options.map((opt) => {
-        const isSelected = currentStatus === opt.value;
-        return (
-          <button
-            key={opt.value}
-            onClick={() => onSelect(opt.value)}
-            disabled={disabled}
-            className={`flex h-10 flex-1 items-center justify-center gap-1.5 font-display text-xs font-bold uppercase tracking-wider transition-all active:scale-[0.98] ${isSelected ? `${opt.bg} border-2 ${opt.text} shadow-[2px_2px_0px_0px_#000]` : "text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-zinc-800"
-              } ${disabled ? "opacity-50 cursor-not-allowed" : ""}`}
-          >
-            {opt.icon}
-            <span>{opt.label}</span>
-          </button>
-        );
-      })}
-    </div>
-  );
-}
+type Weekend = WeekendWithCounts & { trip_id: string };
 
 export function AvailabilityClient({ tripId }: { tripId: string }) {
   const [weekends, setWeekends] = useState<Weekend[]>([]);
@@ -307,7 +131,12 @@ export function AvailabilityClient({ tripId }: { tripId: string }) {
           <div className="h-2 w-2 border-2 border-black bg-white dark:border-ink-dark/40 dark:bg-surface-dark-2" />
         </div>
 
-        <div className="flex w-full border-2 border-black bg-white p-1 dark:border-ink-dark/40 dark:bg-surface-dark-2">
+        <div className="relative flex w-full border-2 border-black bg-white p-1 dark:border-ink-dark/40 dark:bg-surface-dark-2">
+          <div className="absolute -top-8 right-0">
+            <Tooltip content="Filter dates to show only the ones you haven't voted on yet." position="left">
+              <button type="button" aria-label="Filter dates you have not voted on" className="cursor-help rounded-full bg-slate-200 px-2 py-0.5 text-[10px] font-bold text-slate-600 dark:bg-zinc-700 dark:text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1">Start here?</button>
+            </Tooltip>
+          </div>
           <button
             onClick={() => setTab("all")}
             className={`flex-1 py-2 font-display text-sm font-bold uppercase tracking-wider transition-all ${tab === "all" ? "bg-black text-white dark:bg-white dark:text-black" : "text-slate-500 hover:bg-slate-100 dark:hover:bg-zinc-800"
@@ -336,47 +165,16 @@ export function AvailabilityClient({ tripId }: { tripId: string }) {
               <span className="font-display text-sm font-bold uppercase tracking-wider text-slate-400">No dates available</span>
             </div>
           ) : (
-            filteredWeekends.map((w) => {
-              const start = parseISO(w.weekend_start);
-              const end = parseISO(w.weekend_end);
-              const dateRange =
-                w.weekend_start === w.weekend_end
-                  ? format(start, "MMM dd")
-                  : `${format(start, "MMM dd")} – ${format(end, "MMM dd")}`;
-              const weekdayRange =
-                w.weekend_start === w.weekend_end
-                  ? format(start, "EEEE")
-                  : `${format(start, "EEEE")} – ${format(end, "EEEE")}`;
-              const status = myAvailability[w.weekend_start] ?? "unset";
-              const isSaving = savingKey === w.weekend_start;
-
-              return (
-                <div key={w.weekend_start} className="flex flex-col gap-3 border-b-2 border-black pb-4 dark:border-ink-dark/40">
-                  <div className="flex items-center justify-between">
-                    <div className="flex flex-col">
-                      <span className="font-sans text-lg font-bold text-black dark:text-white">{dateRange}</span>
-                      <span className="font-display text-xs font-bold uppercase tracking-widest text-brand-500">{weekdayRange}</span>
-                    </div>
-                    {w.score > 0 && (
-                      <div className="flex items-center gap-1 border-2 border-black bg-poster-blue px-2.5 py-1 dark:border-ink-dark/40">
-                        <span className="font-display text-[10px] font-bold uppercase tracking-wider text-white">Score: {w.score}</span>
-                      </div>
-                    )}
-                  </div>
-                  <AvailabilityCounts counts={w.counts} />
-                  <SegmentedAvailabilityControl
-                    currentStatus={status}
-                    onSelect={(newStatus) => setStatus(w.weekend_start, newStatus)}
-                    disabled={isSaving}
-                  />
-                  {isSaving && (
-                    <div className="flex items-center gap-1.5 font-display text-xs font-bold uppercase tracking-wider text-slate-400">
-                      <span>Saving...</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })
+            filteredWeekends.map((w) => (
+              <AvailabilityRow
+                key={w.weekend_start}
+                weekend={w}
+                currentStatus={myAvailability[w.weekend_start] ?? "unset"}
+                onStatusChange={(newStatus) => setStatus(w.weekend_start, newStatus)}
+                isSaving={savingKey === w.weekend_start}
+                showCounts
+              />
+            ))
           )}
         </div>
       </div>

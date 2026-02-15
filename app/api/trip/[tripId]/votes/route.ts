@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { assertTripMember } from "@/lib/skills";
 import { upsertVoteSchema } from "@/lib/validation/votes";
 
 export async function POST(req: Request, { params }: { params: Promise<{ tripId: string }> }) {
@@ -7,6 +8,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ tripId:
   const supabase = await createServerSupabaseClient();
   const { data: me } = await supabase.auth.getUser();
   if (!me.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    await assertTripMember(supabase, tripId, me.user.id);
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const json = await req.json().catch(() => null);
   const parsed = upsertVoteSchema.safeParse(json);

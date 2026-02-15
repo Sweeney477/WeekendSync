@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
+import { Tooltip } from "@/components/ui/Tooltip";
+import { getFriendlyProfileError } from "@/lib/uxErrors";
 
 export default function OnboardingPage() {
   const [displayName, setDisplayName] = useState("");
@@ -42,7 +44,7 @@ export default function OnboardingPage() {
       const sp = new URLSearchParams(window.location.search);
       const inviteCode = sp.get("inviteCode");
       const next = sp.get("next");
-      
+
       const res = await fetch("/api/profile", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -63,7 +65,8 @@ export default function OnboardingPage() {
       }
       window.location.href = next || "/";
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to save profile");
+      const msg = e instanceof Error ? e.message : "";
+      setError(getFriendlyProfileError(msg));
     } finally {
       setIsSaving(false);
     }
@@ -81,8 +84,50 @@ export default function OnboardingPage() {
       </header>
 
       <Card className="flex flex-col gap-3">
-        <Input label="Your name" placeholder="e.g. Sam" hint="How your group will see you." value={displayName} onChange={(e) => setDisplayName(e.target.value)} />
-        <Input label="Home city (optional)" placeholder="e.g. Chicago" value={homeCity} onChange={(e) => setHomeCity(e.target.value)} />
+        <div className="flex flex-col gap-1">
+          <Input
+            label={
+              <div className="flex items-center gap-2">
+                Your name
+                <Tooltip content="This is how you'll appear to your friends in the trip.">
+                  <button
+                    type="button"
+                    aria-label="Explain your name"
+                    className="cursor-help rounded-full bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-600 dark:bg-zinc-700 dark:text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                  >
+                    ?
+                  </button>
+                </Tooltip>
+              </div>
+            }
+            placeholder="e.g. Sam"
+            hint="How your group will see you."
+            value={displayName}
+            onChange={(e) => setDisplayName(e.target.value)}
+          />
+        </div>
+
+        <div className="flex flex-col gap-1">
+          <Input
+            label={
+              <div className="flex items-center gap-2">
+                Home city (optional)
+                <Tooltip content="We use this to suggest relevant events and travel options.">
+                  <button
+                    type="button"
+                    aria-label="Explain home city"
+                    className="cursor-help rounded-full bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-600 dark:bg-zinc-700 dark:text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1"
+                  >
+                    ?
+                  </button>
+                </Tooltip>
+              </div>
+            }
+            placeholder="e.g. Chicago"
+            value={homeCity}
+            onChange={(e) => setHomeCity(e.target.value)}
+          />
+        </div>
         <Button onClick={onSave} isLoading={isSaving} disabled={!displayName}>
           Continue
         </Button>

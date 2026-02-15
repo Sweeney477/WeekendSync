@@ -27,3 +27,24 @@ export function getFriendlyCreateError(message: string): string {
     message || "We couldn’t create the trip. Check your connection and try again."
   );
 }
+
+export function getFriendlyProfileError(message: string): string {
+  if (message.includes("display_name") || message.includes("display name")) {
+    return "Please enter a name.";
+  }
+  return message || "We couldn’t save your profile. Check your connection and try again.";
+}
+
+/**
+ * Maps common API or network error phrases to user-friendly copy.
+ * Use for generic save/load failures where no specific handler exists.
+ */
+export function getFriendlyGenericError(message: string, context: "save" | "load" = "save"): string {
+  const fallback = context === "save"
+    ? "We couldn’t save. Please try again."
+    : "We couldn’t load. Please try again.";
+  if (!message || message.startsWith("Failed") || message.includes("fetch")) {
+    return fallback;
+  }
+  return message;
+}

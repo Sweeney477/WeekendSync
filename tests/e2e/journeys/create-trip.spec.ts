@@ -14,5 +14,6 @@ test.describe("@critical Journey: Create Trip", () => {
 
     await expect(page).toHaveURL(/\/sign-in/, { timeout: 15000 });
     expect(page.url()).toMatch(/next=.*trips.*new/);
+    await expect(page.getByRole("heading", { name: /sign in/i })).toBeVisible();
   });
 });

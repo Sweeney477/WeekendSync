@@ -6,7 +6,9 @@ import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
+import { EmptyState } from "@/components/ui/EmptyState";
 import { getFriendlyCreateError, getFriendlyJoinError } from "@/lib/uxErrors";
+import { toast } from "sonner";
 
 type MeResponse = {
   user: { id: string; email?: string | null } | null;
@@ -172,7 +174,7 @@ export function HomeClient() {
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(shareUrl);
-                    alert("Link copied");
+                    toast.success("Link copied");
                   }}
                   className="bg-poster-yellow px-2 py-1 font-display text-xs font-bold uppercase tracking-widest text-black hover:bg-black hover:text-white"
                   aria-label="Copy invite link"
@@ -188,7 +190,7 @@ export function HomeClient() {
                     url: shareUrl,
                   }).catch(() => {
                     navigator.clipboard.writeText(shareUrl);
-                    alert("Link copied");
+                    toast.success("Link copied");
                   });
                 }}
                 className="flex w-full items-center justify-center gap-2 bg-poster-blue py-4 font-display text-xl font-bold uppercase tracking-widest text-white transition-all hover:bg-black active:translate-y-1"
@@ -323,6 +325,45 @@ export function HomeClient() {
                 </Link>
               ))}
             </div>
+          </div>
+        ) : isAuthed && !loading ? (
+          <div className="mb-12">
+            <EmptyState
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="32"
+                  height="32"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+                  <line x1="16" x2="16" y1="2" y2="6" />
+                  <line x1="8" x2="8" y1="2" y2="6" />
+                  <line x1="3" x2="21" y1="10" y2="10" />
+                </svg>
+              }
+              title="No Trips Yet"
+              description="Create a trip to coordinate availability, vote on dates, and plan your weekend with friends."
+              primaryAction={{
+                label: "Create Your First Trip",
+                onClick: () => {
+                  if (needsOnboarding) {
+                    router.push("/onboarding?next=/trips/new");
+                  } else {
+                    router.push("/trips/new");
+                  }
+                },
+              }}
+              secondaryAction={{
+                label: "Learn How It Works",
+                href: "/help",
+              }}
+            />
           </div>
         ) : null}
 

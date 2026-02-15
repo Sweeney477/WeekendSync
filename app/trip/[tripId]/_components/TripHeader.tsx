@@ -13,19 +13,20 @@ export function TripHeader({ title, subtitle, showSearch }: TripHeaderProps) {
   const router = useRouter();
 
   return (
-    <header className="sticky top-0 z-50 flex w-full items-center justify-between bg-slate-50/80 px-4 py-4 backdrop-blur-md dark:bg-surface-dark/80">
+    <header className="sticky top-0 z-50 flex w-full items-center justify-between border-b-4 border-black bg-white px-4 py-4 dark:border-white dark:bg-zinc-900">
       <button
         onClick={() => router.back()}
-        className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100 dark:text-ink-dark dark:hover:bg-surface-dark-2"
+        className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-yellow dark:border-white dark:bg-zinc-800 dark:text-white dark:hover:bg-poster-yellow dark:hover:text-black"
+        aria-label="Go back"
       >
         <svg
           xmlns="http://www.w3.org/2000/svg"
-          width="28"
-          height="28"
+          width="24"
+          height="24"
           viewBox="0 0 24 24"
           fill="none"
           stroke="currentColor"
-          strokeWidth="2.5"
+          strokeWidth="3"
           strokeLinecap="round"
           strokeLinejoin="round"
         >
@@ -34,21 +35,27 @@ export function TripHeader({ title, subtitle, showSearch }: TripHeaderProps) {
       </button>
 
       <div className="flex flex-col items-center text-center">
-        <h1 className="text-lg font-bold text-slate-900 dark:text-ink-dark">{title}</h1>
-        {subtitle && <p className="text-[10px] font-bold uppercase tracking-wider text-brand-500">{subtitle}</p>}
+        <h1 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">
+          {title}
+        </h1>
+        {subtitle && (
+          <p className="font-sans text-[10px] font-bold uppercase tracking-widest text-poster-blue opacity-80">
+            {subtitle}
+          </p>
+        )}
       </div>
 
-      <div className="flex items-center gap-1">
+      <div className="flex items-center gap-2">
         {showSearch && (
-          <button className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100 dark:text-ink-dark dark:hover:bg-surface-dark-2">
+          <button className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-yellow dark:border-white dark:bg-zinc-800 dark:text-white dark:hover:bg-poster-yellow dark:hover:text-black">
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
+              width="20"
+              height="20"
               viewBox="0 0 24 24"
               fill="none"
               stroke="currentColor"
-              strokeWidth="2"
+              strokeWidth="2.5"
               strokeLinecap="round"
               strokeLinejoin="round"
             >
@@ -59,17 +66,17 @@ export function TripHeader({ title, subtitle, showSearch }: TripHeaderProps) {
         )}
         <Link
           href="/profile"
-          className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100 dark:text-ink-dark dark:hover:bg-surface-dark-2"
+          className="flex h-10 w-10 items-center justify-center border-2 border-black bg-white text-black transition-colors hover:bg-poster-green hover:text-white dark:border-white dark:bg-zinc-800 dark:text-white"
           aria-label="Profile"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
+            width="20"
+            height="20"
             viewBox="0 0 24 24"
             fill="none"
             stroke="currentColor"
-            strokeWidth="2"
+            strokeWidth="2.5"
             strokeLinecap="round"
             strokeLinejoin="round"
           >
@@ -77,23 +84,6 @@ export function TripHeader({ title, subtitle, showSearch }: TripHeaderProps) {
             <circle cx="12" cy="7" r="4" />
           </svg>
         </Link>
-        <button className="flex h-10 w-10 items-center justify-center rounded-full text-slate-900 transition-colors hover:bg-slate-100 dark:text-ink-dark dark:hover:bg-surface-dark-2">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="24"
-            height="24"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="2"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          >
-            <circle cx="12" cy="12" r="1" />
-            <circle cx="19" cy="12" r="1" />
-            <circle cx="5" cy="12" r="1" />
-          </svg>
-        </button>
       </div>
     </header>
   );

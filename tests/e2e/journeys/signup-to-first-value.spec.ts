@@ -47,5 +47,6 @@ test.describe("@critical Journey: Signup to First Value", () => {
 
     await expect(page).toHaveURL(/\/sign-in/, { timeout: 15000 });
     expect(page.url()).toContain("next=");
+    await expect(page.getByRole("heading", { name: /sign in/i })).toBeVisible();
   });
 });

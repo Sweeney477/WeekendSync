@@ -6,6 +6,7 @@ import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import Link from "next/link";
 import { getFriendlyCreateError } from "@/lib/uxErrors";
+import { Tooltip } from "@/components/ui/Tooltip";
 
 export function CreateTripClient() {
   const [name, setName] = useState("");
@@ -71,7 +72,8 @@ export function CreateTripClient() {
         throw new Error("No trip ID returned from server");
       }
 
-      const tripUrl = `/trip/${json.trip.id}/dashboard`;
+      // Guided flow: city -> weekend type -> (sports -> games -> itinerary) or dashboard
+      const tripUrl = `/trip/${json.trip.id}/setup/city`;
 
       // Use window.location for a hard redirect to ensure the trip page loads fresh
       window.location.href = tripUrl;
@@ -126,7 +128,12 @@ export function CreateTripClient() {
                 required
                 className="h-14 w-full border-2 border-black bg-transparent px-4 font-sans text-lg font-bold focus:border-primary focus:ring-0 dark:border-ink-dark/40 dark:text-ink-dark dark:focus:border-poster-yellow"
               />
-              <p className="text-xs text-slate-500 dark:text-muted-dark">The earliest date we should consider.</p>
+              <div className="flex items-center gap-2">
+                <p className="text-xs text-slate-500 dark:text-muted-dark">The earliest date we should consider.</p>
+                <Tooltip content="We'll generate potential weekends starting from this date.">
+                  <button type="button" aria-label="Explain first date" className="cursor-help rounded-full bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-600 dark:bg-zinc-700 dark:text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1">?</button>
+                </Tooltip>
+              </div>
             </div>
 
             <div className="flex flex-col gap-2">
@@ -147,7 +154,12 @@ export function CreateTripClient() {
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="m6 9 6 6 6-6" /></svg>
                 </div>
               </div>
-              <p className="text-xs text-slate-500 dark:text-muted-dark">This controls how many consecutive days each option spans.</p>
+              <div className="flex items-center gap-2">
+                <p className="text-xs text-slate-500 dark:text-muted-dark">This controls how many consecutive days each option spans.</p>
+                <Tooltip content="Choose 'Weekend' for Fri-Sun trips, or 'Custom' for longer vacations.">
+                  <button type="button" aria-label="Explain trip type" className="cursor-help rounded-full bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-600 dark:bg-zinc-700 dark:text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1">?</button>
+                </Tooltip>
+              </div>
             </div>
 
             {timeframeMode === "custom" ? (
@@ -176,7 +188,12 @@ export function CreateTripClient() {
                 required
                 className="h-14 w-full border-2 border-black bg-transparent px-4 font-sans text-lg font-bold focus:border-primary focus:ring-0 dark:border-ink-dark/40 dark:text-ink-dark dark:focus:border-poster-yellow"
               />
-              <p className="text-xs text-slate-500 dark:text-muted-dark">How many weekly options should we generate?</p>
+              <div className="flex items-center gap-2">
+                <p className="text-xs text-slate-500 dark:text-muted-dark">How many weekly options should we generate?</p>
+                <Tooltip content="We'll look this many weeks into the future to find the best dates.">
+                  <button type="button" aria-label="Explain planning window" className="cursor-help rounded-full bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-600 dark:bg-zinc-700 dark:text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1">?</button>
+                </Tooltip>
+              </div>
             </div>
           </div>
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { toast } from "sonner";
+
 export function InviteButton({ inviteCode }: { inviteCode: string }) {
   const inviteLink = `${typeof window !== "undefined" ? window.location.origin : ""}/join/${inviteCode}`;
 
@@ -12,7 +14,7 @@ export function InviteButton({ inviteCode }: { inviteCode: string }) {
         });
       } else {
         await navigator.clipboard.writeText(inviteLink);
-        alert("Link copied");
+        toast.success("Link copied");
       }
     } catch (err) {
       // User cancelled share or error occurred
@@ -20,9 +22,9 @@ export function InviteButton({ inviteCode }: { inviteCode: string }) {
         // Fallback to clipboard if share fails (not user cancellation)
         try {
           await navigator.clipboard.writeText(inviteLink);
-          alert("Link copied");
+          toast.success("Link copied");
         } catch {
-          alert("Couldn’t copy link. Try again.");
+          toast.error("Clipboard access failed. Please select and copy the code manually.");
         }
       }
     }

@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { Card } from "@/components/ui/Card";
 import { Input } from "@/components/ui/Input";
 import { ThemeToggle } from "@/components/ui/ThemeToggle";
+import { getFriendlyProfileError } from "@/lib/uxErrors";
 
 export default function ProfilePage() {
   const [displayName, setDisplayName] = useState("");
@@ -51,7 +52,8 @@ export default function ProfilePage() {
       if (!res.ok) throw new Error(await res.text());
       setSuccess("Profile updated.");
     } catch (e) {
-      setError(e instanceof Error ? e.message : "Failed to save profile");
+      const msg = e instanceof Error ? e.message : "";
+      setError(getFriendlyProfileError(msg));
     } finally {
       setIsSaving(false);
     }
@@ -73,7 +75,7 @@ export default function ProfilePage() {
         </Link>
       </header>
 
-      <div className="flex flex-col gap-4 border-4 border-black bg-white p-6 dark:border-ink-dark/40 dark:bg-surface-dark shadow-[8px_8px_0px_0px_#000] dark:shadow-[8px_8px_0px_0px_rgba(232,228,223,0.15)]">
+      <Card className="flex flex-col gap-4">
         <ThemeToggle />
 
         <div className="flex flex-col gap-2">
@@ -108,7 +110,34 @@ export default function ProfilePage() {
 
         {error ? <p className="font-display text-sm font-bold uppercase tracking-wider text-rose-600 dark:text-rose-400">{error}</p> : null}
         {success ? <p className="font-display text-sm font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400">{success}</p> : null}
-      </div>
+      </Card>
+
+      <Card className="flex flex-col gap-4">
+        <h2 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-ink-dark">Tips & Tricks</h2>
+        <div className="flex flex-col gap-3">
+          <div className="flex gap-3">
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-poster-yellow font-bold text-black">1</div>
+            <div>
+              <h4 className="font-bold text-black dark:text-ink-dark">Invite Everyone</h4>
+              <p className="text-sm text-slate-600 dark:text-muted-dark">Share your trip code to get the whole squad voting.</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-poster-pink font-bold text-black">2</div>
+            <div>
+              <h4 className="font-bold text-black dark:text-ink-dark">Ranked Voting</h4>
+              <p className="text-sm text-slate-600 dark:text-muted-dark">Don&apos;t just pick one! Rank your choices to find the best compromise.</p>
+            </div>
+          </div>
+          <div className="flex gap-3">
+            <div className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-poster-green font-bold text-black">3</div>
+            <div>
+              <h4 className="font-bold text-black dark:text-ink-dark">Works Offline</h4>
+              <p className="text-sm text-slate-600 dark:text-muted-dark">Going off the grid? You can still view plans and make edits offline.</p>
+            </div>
+          </div>
+        </div>
+      </Card>
     </main>
   );
 }

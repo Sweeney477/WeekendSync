@@ -2,7 +2,9 @@
 
 import { useEffect, useState, useMemo } from "react";
 import { format, parseISO } from "date-fns";
+import { toast } from "sonner";
 import { StickyFooter } from "@/components/ui/StickyFooter";
+import { Skeleton } from "@/components/ui/Skeleton";
 
 type Weekend = {
   weekend_start: string;
@@ -32,7 +34,8 @@ export function WeekendsClient({ tripId }: { tripId: string }) {
       if (json?.timeframeMode) setTimeframeMode(json.timeframeMode);
       setLoading(false);
     })().catch((e) => {
-      setError(e instanceof Error ? e.message : "Failed to load");
+      console.error(e);
+      toast.error(e instanceof Error ? e.message : "Could not load weekend data. Please refresh.");
       setLoading(false);
     });
   }, [tripId]);
@@ -64,6 +67,46 @@ export function WeekendsClient({ tripId }: { tripId: string }) {
     // For now, let's just redirect to destinations
     window.location.href = `/trip/${tripId}/destinations`;
   };
+
+
+  if (loading) {
+    return (
+      <div className="flex flex-col gap-6 pt-4 px-4 pb-40">
+        <div className="flex flex-col gap-4">
+          <Skeleton className="h-3 w-32" />
+          <div className="flex gap-2">
+            <Skeleton className="h-10 w-32" />
+            <Skeleton className="h-10 w-32" />
+            <Skeleton className="h-10 w-24" />
+          </div>
+        </div>
+        <div className="flex flex-col gap-4">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-6 w-24" />
+          </div>
+          <div className="flex flex-col gap-4">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="flex h-40 w-full flex-col justify-between border-2 border-slate-200 bg-slate-50 p-6 dark:border-zinc-800 dark:bg-zinc-900">
+                <div className="flex justify-between">
+                  <div className="flex flex-col gap-2">
+                    <Skeleton className="h-8 w-48" />
+                    <Skeleton className="h-4 w-32" />
+                  </div>
+                  <Skeleton className="h-8 w-8" />
+                </div>
+                <div className="flex gap-2">
+                  <Skeleton className="h-6 w-16" />
+                  <Skeleton className="h-6 w-16" />
+                  <Skeleton className="h-6 w-16" />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="flex flex-col gap-6 pt-4">

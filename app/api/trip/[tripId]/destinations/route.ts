@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { assertTripMember } from "@/lib/skills";
 import { addDestinationSchema } from "@/lib/validation/destinations";
 
 const CURATED_DESTINATIONS: Array<{ city_name: string; country_code: string | null; rationale_tags: string[]; rank_score: number }> =
@@ -16,6 +17,12 @@ export async function GET(_req: Request, { params }: { params: Promise<{ tripId:
   const supabase = await createServerSupabaseClient();
   const { data: me } = await supabase.auth.getUser();
   if (!me.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    await assertTripMember(supabase, tripId, me.user.id);
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const { data: existing, error } = await supabase
     .from("destination_options")
@@ -56,6 +63,12 @@ export async function POST(req: Request, { params }: { params: Promise<{ tripId:
   const supabase = await createServerSupabaseClient();
   const { data: me } = await supabase.auth.getUser();
   if (!me.user) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  try {
+    await assertTripMember(supabase, tripId, me.user.id);
+  } catch {
+    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+  }
 
   const json = await req.json().catch(() => null);
   const parsed = addDestinationSchema.safeParse(json);

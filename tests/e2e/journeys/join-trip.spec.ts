@@ -70,7 +70,8 @@ test.describe("@critical Journey: Join Trip - Home flow", () => {
     await codeInput.fill("INVALID99");
     await page.getByRole("button", { name: /join trip/i }).click();
 
-    await expect(page).toHaveURL(/\/sign-in/);
+    await expect(page).toHaveURL(/\/sign-in/, { timeout: 15000 });
     expect(page.url()).toContain("inviteCode=INVALID99");
+    await expect(page.getByRole("heading", { name: /sign in/i })).toBeVisible();
   });
 });

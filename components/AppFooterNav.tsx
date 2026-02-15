@@ -15,7 +15,7 @@ export function AppFooterNav({ isAuthed }: { isAuthed: boolean }) {
     >
       <button
         type="button"
-        className={`${linkClass} text-primary`}
+        className={`${linkClass} text-rose-700`}
         onClick={() => router.push("/")}
       >
         <svg

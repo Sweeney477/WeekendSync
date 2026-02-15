@@ -1,0 +1,190 @@
+%PDF-1.4
+1 0 obj
+<< /Type /Catalog /Pages 2 0 R >>
+endobj
+2 0 obj
+<< /Type /Pages /Kids [3 0 R] /Count 1 >>
+endobj
+3 0 obj
+<< /Type /Page /Parent 2 0 R /MediaBox [0 0 612 792] /Resources << /Font << /F1 4 0 R /F2 5 0 R >> >> /Contents 6 0 R >>
+endobj
+4 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica >>
+endobj
+5 0 obj
+<< /Type /Font /Subtype /Type1 /BaseFont /Helvetica-Bold >>
+endobj
+6 0 obj
+<< /Length 2905 >>
+stream
+BT
+/F2 14 Tf
+1 0 0 1 54 760 Tm
+(WeekendSync - App Summary) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 730 Tm
+(What it is) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 714 Tm
+(WeekendSync is a Next.js app backed by Supabase \(Auth + Postgres + RLS\) for planning) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 700 Tm
+(group weekend trips. It helps groups coordinate dates, destinations, and trip plans in) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 686 Tm
+(one shared workspace.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 662 Tm
+(Who it's for) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 646 Tm
+(Primary users: small groups \(friends, families, teams\) planning a weekend trip together.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 622 Tm
+(What it does) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 606 Tm
+(- Magic-link sign-in and onboarding profile creation.) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 592 Tm
+(- Create and join trips with invite codes and member roles.) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 578 Tm
+(- Coordinate availability and ranked-choice voting for weekends and destinations.) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 564 Tm
+(- Plan itineraries, logistics, and costs with per-person splits.) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 550 Tm
+(- Discover and save events via Ticketmaster integration.) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 536 Tm
+(- Export trip calendars to .ics and support offline caching and queued edits.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 512 Tm
+(How it works) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 496 Tm
+(- Next.js App Router UI in app/ with public, auth, dashboard, and trip routes.) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 482 Tm
+(- Supabase SSR clients for browser/server/admin in lib/supabase/; middleware refreshes) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 468 Tm
+(  auth cookies.) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 454 Tm
+(- API routes in app/api/ call Supabase RPC and tables \(e.g., create_trip,) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 440 Tm
+(  join_trip_by_invite\).) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 426 Tm
+(- Data stored in Supabase Postgres with RLS in db/schema.sql \(profiles, trips, members,) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 412 Tm
+(  availability, votes, events, planning tables\).) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 398 Tm
+(- External Ticketmaster API client in lib/ticketmaster.ts for event search; client) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 384 Tm
+(  utilities for offline cache and calendar export.) Tj
+ET
+BT
+/F2 12 Tf
+1 0 0 1 54 360 Tm
+(How to run) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 344 Tm
+(- Create a Supabase project and set NEXT_PUBLIC_SUPABASE_URL and) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 330 Tm
+(  NEXT_PUBLIC_SUPABASE_ANON_KEY in .env.local \(see env.example\).) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 316 Tm
+(- Apply db/schema.sql in the Supabase SQL editor and set Auth redirect URL to) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 302 Tm
+(  http://localhost:3000/auth/callback.) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 288 Tm
+(- \(Optional\) Set SUPABASE_SERVICE_ROLE_KEY and TICKETMASTER_API_KEY in .env.local.) Tj
+ET
+BT
+/F1 11 Tf
+1 0 0 1 54 274 Tm
+(- Run npm run dev and visit /sign-in.) Tj
+ET
+endstream
+endobj
+xref
+0 7
+0000000000 65535 f 
+0000000009 00000 n 
+0000000058 00000 n 
+0000000115 00000 n 
+0000000251 00000 n 
+0000000321 00000 n 
+0000000396 00000 n 
+trailer
+<< /Size 7 /Root 1 0 R >>
+startxref
+3353
+%%EOF

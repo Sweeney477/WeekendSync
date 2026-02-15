@@ -1,5 +1,6 @@
 "use client";
 
+import { toast } from "sonner";
 import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { Card } from "@/components/ui/Card";
@@ -333,7 +334,7 @@ export function SummaryClient({ tripId }: { tripId: string }) {
           <button
             onClick={() => {
               navigator.clipboard.writeText(window.location.origin + `/join/${tripId}`);
-              alert("Link copied!");
+              toast.success("Link copied!");
             }}
             className="flex h-16 w-full items-center justify-center gap-2 rounded-2xl bg-slate-100 font-bold text-slate-900 transition-all active:scale-[0.98]"
           >

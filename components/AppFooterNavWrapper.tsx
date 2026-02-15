@@ -8,6 +8,8 @@ type MeResponse = {
   profile?: { id: string; display_name: string; home_city: string | null } | null;
 };
 
+import { WhatsNewModal } from "./discovery/WhatsNewModal";
+
 export function AppFooterNavWrapper() {
   const [isAuthed, setIsAuthed] = useState(false);
 
@@ -18,5 +20,10 @@ export function AppFooterNavWrapper() {
       .catch(() => setIsAuthed(false));
   }, []);
 
-  return <AppFooterNav isAuthed={isAuthed} />;
+  return (
+    <>
+      <AppFooterNav isAuthed={isAuthed} />
+      <WhatsNewModal />
+    </>
+  );
 }

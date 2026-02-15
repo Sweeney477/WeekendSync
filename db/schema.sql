@@ -34,6 +34,13 @@ create table if not exists public.trips (
   invite_code text unique not null,
   privacy text not null default 'code', -- code|invite
   emergency_contact text null,
+  -- Guided flow (weekend type, sports, baseball)
+  weekend_type text null, -- friends|concert|sports|food_bars|chill|other
+  selected_city text null,
+  selected_city_meta jsonb null,
+  preferences_json jsonb null,
+  selected_event_id uuid null, -- FK added after events table
+  selected_itinerary_template_id text null,
   created_at timestamptz not null default now(),
   constraint trips_status_check check (status in ('open','locked')),
   constraint trips_privacy_check check (privacy in ('code','invite'))
@@ -127,6 +134,14 @@ create table if not exists public.events (
   venue text null,
   category text null,
   url text null,
+  sport text null,
+  league text null,
+  home_team text null,
+  away_team text null,
+  city text null,
+  image_url text null,
+  ticket_availability_status text null, -- available|limited|unknown|unavailable
+  raw_payload jsonb null,
   created_at timestamptz not null default now(),
   constraint events_unique unique (trip_id, external_source, external_event_id)
 );
@@ -672,6 +687,17 @@ begin
       add constraint trips_selected_destination_id_fkey
       foreign key (selected_destination_id)
       references public.destination_options(id)
+      on delete set null;
+  end if;
+end $$;
+-- Link trips.selected_event_id -> events.id (nullable)
+do $$
+begin
+  if not exists (select 1 from pg_constraint where conname = 'trips_selected_event_id_fkey') then
+    alter table public.trips
+      add constraint trips_selected_event_id_fkey
+      foreign key (selected_event_id)
+      references public.events(id)
       on delete set null;
   end if;
 end $$;

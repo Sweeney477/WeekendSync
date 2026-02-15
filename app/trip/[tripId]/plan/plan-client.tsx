@@ -2,11 +2,17 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { Card } from "@/components/ui/Card";
 import { Button } from "@/components/ui/Button";
 import { Input } from "@/components/ui/Input";
+import { Skeleton } from "@/components/ui/Skeleton";
+import { toast } from "sonner";
 import { requestNotificationPermission, scheduleReminder } from "@/lib/notifications";
 import { cacheTripData, getCachedTripData, syncQueue, isOnline, queueEdit } from "@/lib/offline";
+import { EmptyState } from "@/components/ui/EmptyState";
+import { PlanningProgress } from "@/components/trip/PlanningProgress";
+import { NextStepsCard } from "@/components/trip/NextStepsCard";
 
 type Tab = "overview" | "plan" | "people" | "costs";
 
@@ -19,6 +25,9 @@ type TripData = {
   organizerId: string;
   privacy: "code" | "invite";
   emergencyContact?: string;
+  selectedCity?: string | null;
+  weekendType?: string | null;
+  topWeekend?: { weekend_start: string; weekend_end: string; score: number } | null;
 };
 
 type Member = {
@@ -57,13 +66,20 @@ type Logistics = {
 };
 
 export function PlanClient({ tripId, userRole }: { tripId: string; userRole: string }) {
-  const [activeTab, setActiveTab] = useState<Tab>("overview");
+  const searchParams = useSearchParams();
+  const initialTab = searchParams.get("tab") as Tab;
+  const [activeTab, setActiveTab] = useState<Tab>(
+    ["overview", "plan", "people", "costs"].includes(initialTab) ? initialTab : "overview"
+  );
+
+  const action = searchParams.get("action");
   const [loading, setLoading] = useState(true);
   const [trip, setTrip] = useState<TripData | null>(null);
   const [members, setMembers] = useState<Member[]>([]);
   const [planItems, setPlanItems] = useState<PlanItem[]>([]);
   const [costs, setCosts] = useState<Cost[]>([]);
   const [logistics, setLogistics] = useState<Logistics>({ lodging: [], transport: [] });
+  const [hasSubmittedAvailability, setHasSubmittedAvailability] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [offline, setOffline] = useState(!isOnline());
 
@@ -90,12 +106,13 @@ export function PlanClient({ tripId, userRole }: { tripId: string; userRole: str
     }
 
     try {
-      const [tripRes, membersRes, itemsRes, costsRes, logisticsRes] = await Promise.all([
+      const [tripRes, membersRes, itemsRes, costsRes, logisticsRes, availabilityRes] = await Promise.all([
         fetch(`/api/trip/${tripId}/plan`),
         fetch(`/api/trip/${tripId}/members`),
         fetch(`/api/trip/${tripId}/plan/items`),
         fetch(`/api/trip/${tripId}/costs`),
         fetch(`/api/trip/${tripId}/logistics`),
+        fetch(`/api/trip/${tripId}/availability`),
       ]);
 
       // Check for auth/not-found errors first - trip endpoint is required
@@ -165,14 +182,25 @@ export function PlanClient({ tripId, userRole }: { tripId: string; userRole: str
       }
 
       try {
-        logisticsData = logisticsRes.ok ? await logisticsRes.json() : null;
+        const logisticsDataResponse = logisticsRes.ok ? await logisticsRes.json() : null;
+        logisticsData = logisticsDataResponse;
         if (logisticsData?.logistics) {
           setLogistics(logisticsData.logistics);
-        } else if (!logisticsRes.ok && logisticsRes.status !== 404) {
-          console.warn("Failed to load logistics:", logisticsRes.status);
         }
       } catch (err) {
         console.warn("Error parsing logistics data:", err);
+      }
+
+      // Availability
+      try {
+        const availabilityData = availabilityRes.ok ? await availabilityRes.json() : null;
+        if (availabilityData?.availability && availabilityData.availability.length > 0) {
+          setHasSubmittedAvailability(true);
+        } else {
+          setHasSubmittedAvailability(false);
+        }
+      } catch (err) {
+        console.warn("Error parsing availability data:", err);
       }
 
       // Cache the data
@@ -188,10 +216,10 @@ export function PlanClient({ tripId, userRole }: { tripId: string; userRole: str
       if (isOnline()) {
         const synced = await syncQueue(tripId);
         if (synced > 0) {
-          // Reload to get synced changes
-          // Use recursion carefully or just let the next effect trigger if something changes?
-          // Since loadTripData is in dependencies, we should probably JUST CALL IT?
-          // No, loadTripData doesn't depend on sync status.
+          // Sync complete, reload not strictly necessary if we rely on optimistic updates,
+          // but for now, good to keep.
+          // Note: Calling loadTripData() recursively might lead to loops if sync always returns > 0.
+          // Assuming syncQueue clears the queue, it should be fine.
           await loadTripData();
         }
       }
@@ -254,8 +282,8 @@ export function PlanClient({ tripId, userRole }: { tripId: string; userRole: str
   if (loading) {
     return (
       <div className="flex flex-col gap-6 px-4 pb-24">
-        <div className="h-32 w-full animate-pulse rounded-2xl bg-slate-200 dark:bg-surface-dark-2" />
-        <div className="h-64 w-full animate-pulse rounded-2xl bg-slate-200 dark:bg-surface-dark-2" />
+        <Skeleton className="h-48 w-full rounded-2xl" />
+        <Skeleton className="h-64 w-full rounded-2xl" />
       </div>
     );
   }
@@ -311,10 +339,20 @@ export function PlanClient({ tripId, userRole }: { tripId: string; userRole: str
           logistics={logistics}
           isOrganizer={isOrganizer}
           onUpdate={loadTripData}
+          hasItems={planItems.length > 0}
+          hasCosts={costs.length > 0}
+          hasSubmittedAvailability={hasSubmittedAvailability} // New prop
         />
       )}
       {activeTab === "plan" && (
-        <PlanTab tripId={tripId} items={planItems} setItems={setPlanItems} members={members} onUpdate={loadTripData} />
+        <PlanTab
+          tripId={tripId}
+          items={planItems}
+          setItems={setPlanItems}
+          members={members}
+          onUpdate={loadTripData}
+          initialAddOpen={action === "add-item"}
+        />
       )}
       {activeTab === "people" && (
         <PeopleTab
@@ -326,7 +364,13 @@ export function PlanClient({ tripId, userRole }: { tripId: string; userRole: str
         />
       )}
       {activeTab === "costs" && (
-        <CostsTab tripId={tripId} costs={costs} members={members} onUpdate={loadTripData} />
+        <CostsTab
+          tripId={tripId}
+          costs={costs}
+          members={members}
+          onUpdate={loadTripData}
+          initialAddOpen={action === "add-cost"}
+        />
       )}
     </div>
   );
@@ -339,12 +383,18 @@ function OverviewTab({
   logistics,
   isOrganizer,
   onUpdate,
+  hasItems,
+  hasCosts,
+  hasSubmittedAvailability,
 }: {
   trip: TripData | null;
   members: Member[];
   logistics: Logistics;
   isOrganizer: boolean;
   onUpdate: () => void;
+  hasItems: boolean;
+  hasCosts: boolean;
+  hasSubmittedAvailability: boolean;
 }) {
   const [showPrivacyEdit, setShowPrivacyEdit] = useState(false);
   const [privacy, setPrivacy] = useState<"code" | "invite">(trip?.privacy || "code");
@@ -362,9 +412,10 @@ function OverviewTab({
       });
       if (!res.ok) throw new Error("Failed to save settings");
       setShowPrivacyEdit(false);
+      toast.success("Settings saved");
       onUpdate();
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to save");
+      toast.error(err instanceof Error ? err.message : "Failed to save");
     } finally {
       setSaving(false);
     }
@@ -372,6 +423,14 @@ function OverviewTab({
 
   return (
     <div className="flex flex-col gap-6">
+      {/* Planning Progress */}
+      {trip && (
+        <PlanningProgress
+          hasItems={hasItems}
+          hasCosts={hasCosts}
+          hasMembers={members.length > 1}
+        />
+      )}
       {/* Trip Summary */}
       <Card className="flex flex-col gap-4">
         <div className="flex items-center justify-between">
@@ -390,7 +449,7 @@ function OverviewTab({
                 <button
                   onClick={() => {
                     navigator.clipboard.writeText(trip.inviteCode);
-                    alert("Code copied!");
+                    toast.success("Code copied!");
                   }}
                   className="border-2 border-black bg-slate-100 px-2 py-1 font-display text-xs font-bold uppercase tracking-wider text-black hover:bg-poster-yellow dark:border-white dark:bg-zinc-800 dark:text-white"
                 >
@@ -416,34 +475,19 @@ function OverviewTab({
         )}
       </Card>
 
-      {/* Next Step: Mark Availability */}
-      {trip?.id && (
-        <Link
-          href={`/trip/${trip.id}/availability`}
-          className="relative flex flex-col justify-end border-4 border-black bg-poster-blue p-6 shadow-[8px_8px_0px_0px_#000] transition-all hover:translate-x-0.5 hover:translate-y-0.5 hover:shadow-none dark:border-ink-dark/40 dark:shadow-[8px_8px_0px_0px_rgba(232,228,223,0.15)]"
-        >
-          <div className="flex flex-col gap-2">
-            <h2 className="font-display text-2xl font-bold uppercase tracking-tighter text-white">Next Step: Mark Your Availability</h2>
-            <p className="font-sans text-sm font-medium text-white/90">Let the group know when you can make it.</p>
-          </div>
-          <span className="mt-6 flex h-14 w-full items-center justify-center gap-2 border-2 border-black bg-poster-yellow font-display text-lg font-bold uppercase tracking-widest text-black transition-all hover:bg-white hover:text-black dark:border-white">
-            Continue
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2.5"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <line x1="5" x2="19" y1="12" y2="12" />
-              <polyline points="12 5 19 12 12 19" />
-            </svg>
-          </span>
-        </Link>
+      {/* Next Step Guidance */}
+      {trip && (
+        <NextStepsCard
+          tripId={trip.id}
+          isOrganizer={isOrganizer}
+          memberCount={members.length}
+          hasSubmittedAvailability={hasSubmittedAvailability}
+          datesFinalized={!!trip.topWeekend} // Use inferred status from Plan API
+          destinationFinalized={!!trip.selectedCity}
+          hasLogistics={logistics.lodging.length > 0 || logistics.transport.length > 0}
+          hasItinerary={hasItems}
+          className=""
+        />
       )}
 
       {/* Privacy & Safety */}
@@ -564,7 +608,7 @@ function OverviewTab({
                 if (!res.ok) throw new Error("Failed to leave trip");
                 window.location.href = "/";
               } catch (err) {
-                alert(err instanceof Error ? err.message : "Failed to leave trip");
+                toast.error(err instanceof Error ? err.message : "Failed to leave trip");
               }
             }}
             className="bg-rose-500 text-white"
@@ -577,6 +621,9 @@ function OverviewTab({
   );
 }
 
+import { TipCard } from "@/components/discovery/TipCard";
+import { Tooltip } from "@/components/ui/Tooltip";
+
 // Plan Tab Component
 function PlanTab({
   tripId,
@@ -584,15 +631,23 @@ function PlanTab({
   setItems,
   members,
   onUpdate,
+  initialAddOpen,
 }: {
   tripId: string;
   items: PlanItem[];
   setItems: (items: PlanItem[]) => void;
   members: Member[];
   onUpdate: () => void;
+  initialAddOpen?: boolean;
 }) {
   const [showAddForm, setShowAddForm] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (initialAddOpen) {
+      setShowAddForm(true);
+    }
+  }, [initialAddOpen]);
   const [formData, setFormData] = useState({
     title: "",
     dateTime: "",
@@ -633,7 +688,7 @@ function PlanTab({
         method,
         body,
       });
-      alert("Offline - changes will sync when you're back online");
+      toast.info("Offline - changes will sync when you're back online");
       setShowAddForm(false);
       setEditingId(null);
       setFormData({
@@ -692,9 +747,9 @@ function PlanTab({
           method,
           body,
         });
-        alert("Network error - changes queued for sync");
+        toast.warning("Network error - changes queued for sync");
       } else {
-        alert(err instanceof Error ? err.message : "Failed to save");
+        toast.error(err instanceof Error ? err.message : "Failed to save");
       }
     }
   }
@@ -705,8 +760,9 @@ function PlanTab({
       const res = await fetch(`/api/trip/${tripId}/plan/items/${id}`, { method: "DELETE" });
       if (!res.ok) throw new Error("Failed to delete");
       onUpdate();
+      toast.success("Item deleted");
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Failed to delete");
+      toast.error(err instanceof Error ? err.message : "Failed to delete");
     }
   }
 
@@ -721,6 +777,12 @@ function PlanTab({
           + Add Item
         </button>
       </div>
+
+      <TipCard
+        id="plan_drag_drop"
+        title="Pro Tip"
+        description="We automatically sort items by time. If you notice things out of order, check the AM/PM!"
+      />
 
       {showAddForm && (
         <Card className="flex flex-col gap-4">
@@ -805,9 +867,38 @@ function PlanTab({
       )}
 
       {Object.keys(itemsByDate).length === 0 ? (
-        <Card className="flex flex-col items-center gap-4 py-8">
-          <p className="font-sans text-sm text-slate-500">No items yet. Add your first activity!</p>
-        </Card>
+        <EmptyState
+          icon={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <rect width="18" height="18" x="3" y="4" rx="2" ry="2" />
+              <line x1="16" x2="16" y1="2" y2="6" />
+              <line x1="8" x2="8" y1="2" y2="6" />
+              <line x1="3" x2="21" y1="10" y2="10" />
+              <path d="M8 14h.01" />
+              <path d="M12 14h.01" />
+              <path d="M16 14h.01" />
+              <path d="M8 18h.01" />
+              <path d="M12 18h.01" />
+              <path d="M16 18h.01" />
+            </svg>
+          }
+          title="No Plans Yet"
+          description="Build your itinerary. Add activities, reservations, or notes so everyone knows the plan."
+          primaryAction={{
+            label: "Add First Item",
+            onClick: () => setShowAddForm(true),
+          }}
+        />
       ) : (
         Object.entries(itemsByDate).map(([date, dateItems]) => (
           <div key={date} className="flex flex-col gap-3">
@@ -892,10 +983,10 @@ function PeopleTab({
     try {
       // In a real app this would call an API
       await new Promise((resolve) => setTimeout(resolve, 1000));
-      alert(`Invite sent to ${inviteEmail}`);
+      toast.success(`Invite sent to ${inviteEmail}`);
       setInviteEmail("");
     } catch (err) {
-      alert("Failed to send invite");
+      toast.error("Failed to send invite");
     } finally {
       setInviting(false);
     }
@@ -920,7 +1011,7 @@ function PeopleTab({
                 onClick={() => {
                   if (trip?.inviteCode) {
                     navigator.clipboard.writeText(trip.inviteCode);
-                    alert("Code copied!");
+                    toast.success("Code copied!");
                   }
                 }}
                 className="flex h-12 items-center justify-center border-2 border-black bg-poster-yellow px-4 font-display text-sm font-bold uppercase tracking-widest text-black hover:bg-white dark:border-white"
@@ -978,7 +1069,7 @@ function PeopleTab({
                   onClick={() => {
                     if (confirm(`Remove ${member.displayName}?`)) {
                       // Call remove API
-                      alert("Removed");
+                      toast.success("Removed");
                     }
                   }}
                 >
@@ -1008,7 +1099,7 @@ function LogisticsForm({ tripId, onUpdate }: { tripId: string; onUpdate: () => v
 
   async function handleSave() {
     if (!formData.name || !formData.dates) {
-      alert("Please fill in name and dates");
+      toast.error("Please fill in name and dates");
       return;
     }
     setSaving(true);
@@ -1027,7 +1118,7 @@ function LogisticsForm({ tripId, onUpdate }: { tripId: string; onUpdate: () => v
         method: "POST",
         body,
       });
-      alert("Offline - changes will sync when you're back online");
+      toast.info("Offline - changes will sync when you're back online");
       setShowForm(false);
       setFormData({ type: "lodging", name: "", dates: "", ref: "" });
       setSaving(false);
@@ -1053,9 +1144,9 @@ function LogisticsForm({ tripId, onUpdate }: { tripId: string; onUpdate: () => v
           method: "POST",
           body,
         });
-        alert("Network error - changes queued for sync");
+        toast.warning("Network error - changes queued for sync");
       } else {
-        alert(err instanceof Error ? err.message : "Failed to save");
+        toast.error(err instanceof Error ? err.message : "Failed to save");
       }
     } finally {
       setSaving(false);
@@ -1146,13 +1237,21 @@ function CostsTab({
   costs,
   members,
   onUpdate,
+  initialAddOpen,
 }: {
   tripId: string;
   costs: Cost[];
   members: Member[];
   onUpdate: () => void;
+  initialAddOpen?: boolean;
 }) {
   const [showAddForm, setShowAddForm] = useState(false);
+
+  useEffect(() => {
+    if (initialAddOpen) {
+      setShowAddForm(true);
+    }
+  }, [initialAddOpen]);
   const [formData, setFormData] = useState({
     label: "",
     amount: "",
@@ -1178,7 +1277,7 @@ function CostsTab({
   async function handleSave() {
     const amount = parseFloat(formData.amount);
     if (isNaN(amount) || amount <= 0) {
-      alert("Invalid amount");
+      toast.error("Invalid amount");
       return;
     }
 
@@ -1205,7 +1304,7 @@ function CostsTab({
         method: "POST",
         body,
       });
-      alert("Offline - changes will sync when you're back online");
+      toast.info("Offline - changes will sync when you're back online");
       setShowAddForm(false);
       setFormData({
         label: "",
@@ -1245,9 +1344,9 @@ function CostsTab({
           method: "POST",
           body,
         });
-        alert("Network error - changes queued for sync");
+        toast.warning("Network error - changes queued for sync");
       } else {
-        alert(err instanceof Error ? err.message : "Failed to save");
+        toast.error(err instanceof Error ? err.message : "Failed to save");
       }
     }
   }
@@ -1255,7 +1354,12 @@ function CostsTab({
   return (
     <div className="flex flex-col gap-6">
       <div className="flex items-center justify-between">
-        <h2 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">Costs</h2>
+        <div className="flex items-center gap-2">
+          <h2 className="font-display text-lg font-bold uppercase tracking-wider text-black dark:text-white">Costs</h2>
+          <Tooltip content="Track expenses here. We'll calculate who owes what based on the split. Settle debts outside the app.">
+            <button type="button" aria-label="Explain costs" className="cursor-help rounded-full bg-slate-200 px-1.5 py-0.5 text-[10px] font-bold text-slate-600 dark:bg-zinc-700 dark:text-slate-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1">?</button>
+          </Tooltip>
+        </div>
         <button
           onClick={() => setShowAddForm(true)}
           className="h-10 border-2 border-black bg-brand-500 px-4 font-display text-sm font-bold uppercase tracking-widest text-white transition-all hover:bg-black hover:text-white hover:shadow-[2px_2px_0px_0px_#000] active:translate-x-[1px] active:translate-y-[1px] active:shadow-none dark:border-white dark:text-black dark:hover:bg-white"
@@ -1380,9 +1484,29 @@ function CostsTab({
 
       {/* Cost List */}
       {costs.length === 0 ? (
-        <Card className="flex flex-col items-center gap-4 border-2 border-black bg-white p-8 dark:border-white dark:bg-zinc-900">
-          <p className="font-display text-sm font-bold uppercase tracking-wider text-slate-400">No costs yet. Add your first expense!</p>
-        </Card>
+        <EmptyState
+          icon={
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="32"
+              height="32"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            >
+              <path d="M19 5c-1.5 0-2.8 1.4-3 2-3.5-1.5-11-.3-11 5 0 1.8 0 3 2 4.5V20h8v-2h2v2h3v-6.33c1.9-.36 3.66-2.04 3.66-4.17 0-2.5-2.24-4.5-4.66-4.5zM7 16V9c3.38-1 9-1 11-1v6.75C17.75 16 13 16 7 16zm1-4h2v2H8v-2zm-3 .5c.5-1.5 0-3 2.5-3 2 .5 3 2 2.5 4a6.6 6.6 0 0 1-5-1z" />
+            </svg>
+          }
+          title="No Costs Tracked"
+          description="Keep track of who paid for what. Add expenses to automatically calculate splits and settle debts."
+          primaryAction={{
+            label: "Add First Cost",
+            onClick: () => setShowAddForm(true),
+          }}
+        />
       ) : (
         <div className="flex flex-col gap-3">
           {costs.map((cost) => {
@@ -1427,7 +1551,12 @@ function CostsTab({
       {/* Balance Summary */}
       {costs.length > 0 && (
         <Card className="flex flex-col gap-4 border-2 border-black bg-white p-6 dark:border-white dark:bg-zinc-900">
-          <h3 className="font-display text-sm font-bold uppercase tracking-widest text-slate-500">Balances</h3>
+          <div className="flex items-center gap-2">
+            <h3 className="font-display text-sm font-bold uppercase tracking-widest text-slate-500">Balances</h3>
+            <Tooltip content="Positive means you are owed money. Negative means you owe others.">
+              <button type="button" aria-label="Explain balance" className="cursor-help rounded-full bg-slate-100 px-1.5 py-0.5 text-[10px] font-bold text-slate-400 dark:bg-zinc-800 dark:text-slate-500 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1">?</button>
+            </Tooltip>
+          </div>
           {members.map((member) => {
             const balance = balances[member.userId];
             if (!balance) return null;

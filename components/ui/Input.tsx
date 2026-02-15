@@ -4,7 +4,7 @@ import clsx from "clsx";
 import * as React from "react";
 
 type Props = React.InputHTMLAttributes<HTMLInputElement> & {
-  label?: string;
+  label?: string | React.ReactNode;
   hint?: string;
   error?: string;
 };
